@@ -37,3 +37,21 @@ export const Button = styled.button`
     background-color: #218838;
   }
 `;
+
+export const PasswordInputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+export const PasswordInput = styled.input`
+  width: 100%;
+  padding-right: 40px; // Add space for the eye icon
+`;
+
+export const ToggleIcon = styled.div`
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #888;
+`;

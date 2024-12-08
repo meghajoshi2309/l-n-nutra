@@ -38,3 +38,16 @@ export const Button = styled.button`
     background-color: #218838;
   }
 `;
+
+export const ToggleIcon = styled.div`
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  color: #888;
+`;
+
+export const PasswordInputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
