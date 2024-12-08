@@ -1,6 +1,6 @@
 import React from "react";
-import { Navbar } from "../Navbar/Navbar";
 import { LayoutWrapper ,Content} from "./Layout.styled";
+import { Navbar } from "../Navbar/Navbar";
 
 export const Layout: React.FC<{ children: React.ReactNode }> = ({
   children,

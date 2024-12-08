@@ -72,6 +72,318 @@ const Home: React.FC = () => {
           ))}
         </ProductGrid>
       </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
+      <ProductsSection>
+        <ProductGrid>
+          {products.map((product) => (
+            <ProductCard key={product.id} color={product.color}>
+              <img src={product.image} alt={product.name} />
+              <ProductTitle>{product.name}</ProductTitle>
+              <ProductDescription>{product.description}</ProductDescription>
+              <ProductPrice>{product.price}</ProductPrice>
+            </ProductCard>
+          ))}
+        </ProductGrid>
+      </ProductsSection>
     </HomeContainer>
   );
 };

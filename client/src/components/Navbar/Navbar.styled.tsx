@@ -1,4 +1,4 @@
-import styled, { css, keyframes } from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const pulseAnimation = keyframes`
   0% { transform: scale(1); }
@@ -42,10 +42,16 @@ export const Logo = styled.img`
   width: auto;
 `;
 
-export const NavLinks = styled.nav`
+export const NavLinks = styled.nav<{ hasBorder?: boolean }>`
   display: flex;
-  gap: 2rem;
   margin: 0 auto;
+  border: ${({ hasBorder }) => (hasBorder ? '2px solid #878885;' : '')}; 
+  border-radius: ${({ hasBorder }) => (hasBorder ? '100px' : '')};
+  box-shadow: ${({ hasBorder }) => (hasBorder ? '0 0 20px 0 rgba(255, 255, 255, 0.4)' : '')};
+  padding: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
+  gap: 45px;
 
   @media (max-width: 768px) {
     display: none;
@@ -70,7 +76,63 @@ export const RightSection = styled.div`
   gap: 1.5rem;
 `;
 
-export const MobileSearchContainerr = styled.div`
+
+
+export const MobileSearchModal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: black;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const MobileSearchInputContainer = styled.div`
+  display: flex;
+  width: 90%;
+  align-items: center;
+  background: #3b3b3b;
+  border-radius: 8px;
+  padding: 10px;
+  position: relative;
+`;
+
+export const MobileSearchInput = styled.input`
+  flex: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+  color: white;
+`;
+
+export const MobileSearchActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const MobileSearchIcon = styled.div`
+  img {
+    cursor: pointer;
+  }
+`;
+
+export const MobileSearchCloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: white;
+`;
+
+export const MobileSearchContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column; /* Stack items vertically */
@@ -90,29 +152,6 @@ export const MobileSearchContainerr = styled.div`
   }
 `;
 
-export const MobileSearchIcon = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  padding: 8px;
-`;
-
-export const MobileSearchInputt = styled.input`
-  display: none; /* Initially hidden */
-  width: 100%; /* Full width for input */
-  margin-top: 8px; /* Add margin to place it on the second row */
-  padding: 8px;
-  border: 1px solid #878885;
-  border-radius: 5px;
-  font-size: 14px;
-
-  ${MobileSearchContainerr}:hover &,
-  ${MobileSearchContainerr}:focus-within & {
-    display: block; /* Show input on hover or focus */
-  }
-`;
-
 export const SearchContainer = styled.div`
   position: relative; /* Allows input to expand inside */
   width: 40px; /* Fixed width to prevent layout shift */
@@ -120,7 +159,12 @@ export const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    display: none; /* Hide on mobile view */
+  }
 `;
+
 
 export const SearchInput = styled.input`
   position: absolute; /* Absolute positioning to expand without affecting layout */
@@ -219,35 +263,6 @@ export const MobileNavLink = styled(NavLink)`
   font-size: 1.2rem;
 `;
 
-export const MobileSearchContainer = styled.div<{ isExpanded: boolean }>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background: white;
-  padding: 1rem;
-  transform: translateY(${(props) => (props.isExpanded ? "0" : "-100%")});
-  transition: transform 0.3s ease;
-  z-index: 1002;
-  display: none;
-
-  @media (max-width: 768px) {
-    display: block;
-  }
-`;
-
-export const MobileSearchInput = styled.input`
-  width: 100%;
-  padding: 0.5rem;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  outline: none;
-
-  &:focus {
-    border-color: #666;
-  }
-`;
-
 export const LoginButton = styled.button`
   padding: 0.5rem 1.5rem;
   font-size: x-large;
@@ -315,19 +330,6 @@ export const MobileMenu = styled.div<{ isOpen: boolean }>`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 `;
 
-export const Overlay = styled.div<{ isVisible: boolean }>`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  opacity: ${(props) => (props.isVisible ? "1" : "0")};
-  visibility: ${(props) => (props.isVisible ? "visible" : "hidden")};
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-  z-index: 1000;
-`;
-
 export const CloseButton = styled.button`
   background: none;
   border: none;
@@ -339,42 +341,3 @@ export const CloseButton = styled.button`
     color: #ff4444;
   }
 `;
-
-// export const MobileMenu = styled.div<{ isOpen: boolean }>`
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 80%;
-//   max-width: 300px;
-//   height: 100vh;
-//   background: white;
-//   padding: 2rem;
-//   transform: translateX(${(props) => (props.isOpen ? "0" : "-100%")});
-//   animation: ${(props) => (props.isOpen ? slideIn : slideOut)} 0.3s ease;
-//   z-index: 1001;
-// `;
-
-// export const CloseButton = styled.button`
-//   background: none;
-//   border: none;
-//   cursor: pointer;
-//   padding: 0;
-//   transition: transform 0.2s ease;
-
-//   &:hover {
-//     transform: rotate(90deg);
-//   }
-// `;
-
-// export const Overlay = styled.div<{ isVisible: boolean }>`
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   bottom: 0;
-//   background: rgba(0, 0, 0, 0.5);
-//   opacity: ${(props) => (props.isVisible ? "1" : "0")};
-//   visibility: ${(props) => (props.isVisible ? "visible" : "hidden")};
-//   transition: all 0.3s ease;
-//   z-index: 1000;
-// `;
