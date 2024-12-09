@@ -1,21 +1,25 @@
 import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import styled, { keyframes } from 'styled-components'
+import { useIsMobile } from '../../../Hook/isMobileView';
+import { log } from 'console';
 
 const illustrations = [
-  '/ill1.png?height=400&width=400',
-  '/logo.jpeg?height=400&width=400',
+  '/product-1.jpeg?height=400&width=400',
+  '/product-2.jpeg?height=400&width=400',
+  '/product-3.jpeg?height=400&width=400',
 ]
 
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #434e48 0%, #000000 100%);;;
+  background: linear-gradient(135deg, #434e48 0%, #000000 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-`
+  padding: 20px
+  `;
+
 
 const Card = styled.div`
   background: white;
@@ -23,22 +27,25 @@ const Card = styled.div`
   overflow: hidden;
   width: 100%;
   max-width: 1000px;
+  height: 35rem;
   display: flex;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 
   @media (max-width: 768px) {
     flex-direction: column;
-  }
-`
+    background: transparent;
+  }`;
+
+
 
 const IllustrationSection = styled.div`
   flex: 1.5;
   background: #f8f8f8;
-  padding: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden; /* Ensures the image doesn't overflow the section */
 
   @media (max-width: 768px) {
     display: none;
@@ -51,53 +58,41 @@ const fadeIn = keyframes`
 `;
 
 const IllustrationImage = styled.img`
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the section */
   animation: ${fadeIn} 0.5s ease;
+  position: absolute; /* Optional: if you need absolute positioning for animations */
 `;
 
-const DotsWrapper = styled.div`
-  position: absolute;
-  bottom: 20px;
-  display: flex;
-  gap: 10px;
-`;
-
-const Dot = styled.div<{ isActive: boolean }>`
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: ${(props) => (props.isActive ? "#333" : "#ccc")};
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #666;
-  }
-`;
 
 const FormSection = styled.div`
   flex: 1;
-  padding: 40px;
-`
+  padding: 40px
+  `;
+
 
 const Title = styled.h1`
   font-size: 24px;
-  margin-bottom: 30px;
+  margin-bottom: 70px;
   text-align: center;
-`
+
+  @media (max-width: 768px) {
+    color: white;
+  }
+`;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
   justify-content: center;
-`
+`;
 
 const InputGroup = styled.div`
   position: relative;
-  margin-bottom: 20px;
-`
+  margin-bottom: 33px;
+`;
 
 const Input = styled.input`
   width: 100%;
@@ -118,7 +113,23 @@ const Input = styled.input`
     font-size: 12px;
     color: #137903;
   }
-`
+
+  @media (max-width: 768px) {
+    color: white;
+    background: transparent;
+
+    &:focus {
+      border-bottom-color: #666;
+    }
+
+    &:focus + label,
+    &:not(:placeholder-shown) + label {
+      transform: translateY(-20px);
+      font-size: 12px;
+      color: #666;
+    }
+  }
+`;
 
 const Label = styled.label`
   position: absolute;
@@ -128,7 +139,7 @@ const Label = styled.label`
   color: #666;
   transition: all 0.3s ease;
   pointer-events: none;
-`
+`;
 
 const EyeIcon = styled.div<{ $isOpen: boolean }>`
   position: absolute;
@@ -141,7 +152,7 @@ const EyeIcon = styled.div<{ $isOpen: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const EyeShape = styled.div<{ $isOpen: boolean }>`
   width: 20px;
@@ -158,13 +169,12 @@ const EyeShape = styled.div<{ $isOpen: boolean }>`
   /* For closed eye, hide the eyeball and show the curve with lashes */
   ${(props) =>
     !props.$isOpen &&
-    `
-    border: none;
+    `border: none;
     border-bottom: 1.5px solid #000000;
     height: 6px;
     transform: none;
-    overflow: visible;
-  `}
+    overflow: visible;`
+  }
 
   &::before {
     content: '';
@@ -179,6 +189,32 @@ const EyeShape = styled.div<{ $isOpen: boolean }>`
     ${(props) => !props.$isOpen && `display: none;`}
   }
 
+  @media (max-width: 768px){
+    border: 1.5px solid white;
+
+    ${(props) =>
+    !props.$isOpen &&
+    
+    `border: none;
+    border-bottom: 1.5px solid white;
+    height: 6px;
+    transform: none;
+    overflow: visible;`
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 5px;
+    transition: transform 0.3s ease;
+    ${(props) => !props.$isOpen && `display: none;`}
+  }
+  }
 `;
 
 
@@ -191,10 +227,11 @@ const EyePupil = styled.div<{ $x: number; $y: number }>`
   top: ${props => 2 + props.$y * 2}px;
   left: ${props => 5 + props.$x * 2}px;
   transition: all 0.1s ease;
-`
+`;
 
 const Button = styled.button`
-  background: linear-gradient(135deg, #434e48 0%, #000000 100%);;;
+  /* background: linear-gradient(135deg, #6a8a79 0%, #000000 100%); */
+  background: #000000;
   color: white;
   border: none;
   padding: 15px;
@@ -202,18 +239,25 @@ const Button = styled.button`
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s ease;
+  margin-top: 45px;
 
   &:hover {
-    background: linear-gradient(135deg, #4ADE80 0%, #64748B 100%);;
+    /* background: linear-gradient(135deg, #488e68, #1a7142, #000000); */
+    background: #137903;
   }
-`
+
+  @media (max-width: 768px) {
+    background: white;
+    color: black;
+  }
+`;
 
 const ErrorMessage = styled.div`
   color: #ff3333;
   font-size: 14px;
   margin-bottom: 20px;
   text-align: center;
-`
+`;
 
 const Link = styled.a`
   color: #137903;
@@ -223,9 +267,21 @@ const Link = styled.a`
   &:hover {
     text-decoration: underline;
   }
-`
+  @media (max-width: 768px) {
+    color:#68f752;
+  }
+  `;
 
 
+const SignupText = styled.div`
+  text-align: 'center';
+  margin-top: '10px';
+  color: 'black';
+
+  @media (max-width: 768px) {
+    color: white;
+  }
+`;
 
 const Login = () => {
 
@@ -238,6 +294,9 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [pupilPosition, setPupilPosition] = useState({ x: 0, y: 0 })
   const eyeRef = useRef<HTMLDivElement>(null)
+
+  const isMobileView = useIsMobile();
+  console.log(isMobileView)
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -276,7 +335,7 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response = await axios.post('http://localhost:5000/api/users/login', {
+      const response = await axios.post(`http://localhost:5000/api/users/login`, {
         email,
         password,
       })
@@ -290,15 +349,6 @@ const Login = () => {
     <Container>
       <Card>
         <IllustrationSection>
-          <DotsWrapper>
-            {illustrations.map((_, index) => (
-              <Dot
-                key={index}
-                isActive={currentImage === index}
-                onClick={() => setCurrentImage(index)}
-              />
-            ))}
-          </DotsWrapper>
           <IllustrationImage
             src={illustrations[currentImage]}
             alt={`Illustration ${currentImage + 1}`}
@@ -343,15 +393,16 @@ const Login = () => {
                     />
                   )}
                 </EyeShape>}
-                {!showPassword && <img src='close_eye.png' style={{ width: '24px', height: '24px' }} />}
+                {!showPassword && !isMobileView &&  <img src='close_eye.png' style={{ width: '24px', height: '24px' }} />}
+                {!showPassword && isMobileView && <img src='white_close_eye.png' style={{ width: '24px', height: '24px' }} />}
               </EyeIcon>
             </InputGroup>
 
             <Button type="submit">Login</Button>
 
-            <div style={{ textAlign: 'center', marginTop: '10px' }}>
+            <SignupText>
               Don't have an account? <Link href="/register">Sign Up</Link>
-            </div>
+            </SignupText>
           </Form>
         </FormSection>
       </Card>
