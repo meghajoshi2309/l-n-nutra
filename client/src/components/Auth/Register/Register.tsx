@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import styled, { keyframes } from 'styled-components';
 import { useIsMobile } from '../../../Hook/isMobileView';
+import { useNavigate } from 'react-router-dom';
 
 const illustrations = [
   '/product-1.jpeg?height=400&width=400',
@@ -294,6 +295,7 @@ const Registration = () => {
   const eyeRef = useRef<HTMLDivElement>(null);
 
   const isMobileView = useIsMobile();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -340,6 +342,9 @@ const Registration = () => {
         confirmPassword
       });
       console.log('Registration Successful:', response.data);
+      if (response.data) {
+        navigate("/login")
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'An error occurred');
     }

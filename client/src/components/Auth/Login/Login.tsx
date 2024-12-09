@@ -3,6 +3,7 @@ import axios from 'axios'
 import styled, { keyframes } from 'styled-components'
 import { useIsMobile } from '../../../Hook/isMobileView';
 import { log } from 'console';
+import { useNavigate } from 'react-router-dom';
 
 const illustrations = [
   '/product-1.jpeg?height=400&width=400',
@@ -194,7 +195,7 @@ const EyeShape = styled.div<{ $isOpen: boolean }>`
 
     ${(props) =>
     !props.$isOpen &&
-    
+
     `border: none;
     border-bottom: 1.5px solid white;
     height: 6px;
@@ -296,7 +297,7 @@ const Login = () => {
   const eyeRef = useRef<HTMLDivElement>(null)
 
   const isMobileView = useIsMobile();
-  console.log(isMobileView)
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -335,11 +336,12 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const response = await axios.post(`http://localhost:5000/api/users/login`, {
-        email,
-        password,
-      })
+      const response = await axios.post(`http://localhost:5000/api/users/login`, { email, password })
       console.log('Login Successful:', response.data)
+      if(response.data){
+        localStorage.setItem("isLoggedIn", "true");
+        navigate("/")
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'An error occurred')
     }
@@ -393,7 +395,7 @@ const Login = () => {
                     />
                   )}
                 </EyeShape>}
-                {!showPassword && !isMobileView &&  <img src='close_eye.png' style={{ width: '24px', height: '24px' }} />}
+                {!showPassword && !isMobileView && <img src='close_eye.png' style={{ width: '24px', height: '24px' }} />}
                 {!showPassword && isMobileView && <img src='white_close_eye.png' style={{ width: '24px', height: '24px' }} />}
               </EyeIcon>
             </InputGroup>

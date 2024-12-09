@@ -7,6 +7,7 @@ import Home from "./components/Home/Home";
 // import Blogs from "./components/Blogs/Blogs";
 import Login from "./components/Auth/Login/Login";
 import Register from "./components/Auth/Register/Register";
+import Cart from "./components/Cart/Cart";
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/cart" element={<Cart />} />
         <Route
           path="*"
           element={

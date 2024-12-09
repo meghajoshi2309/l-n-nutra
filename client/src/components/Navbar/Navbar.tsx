@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   NavbarContainer,
   LogoContainer,
@@ -43,6 +43,8 @@ export const Navbar: React.FC = () => {
   const [hasBorder, setHasBorder] = useState(false);
 
   const isMobile = useIsMobile();
+
+  const navigate = useNavigate();
 
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -141,14 +143,14 @@ export const Navbar: React.FC = () => {
 
           {/* Profile Icon */}
           {isMobile ? (
-              <img src="/profile.png" alt="Profile" width={25} height={25} />
+              <img src="/profile.png" alt="Profile" width={25} height={25} onClick={() => navigate('/login')}/>
           ) : (
-            <LoginButton>Login</LoginButton>
+            <LoginButton onClick={() => navigate('/login')}>Login</LoginButton>
           )}
 
           {/* Cart Icon */}
           <CartButton>
-            <img src="/cart.png" alt="Cart Icon" width="25" height="25" />
+            <img src="/cart.png" alt="Cart Icon" width="25" height="25" onClick={() => navigate("/cart")}/>
             {cartItemCount > 0 && <CartCount>{cartItemCount}</CartCount>}
           </CartButton>
         </RightSection>
