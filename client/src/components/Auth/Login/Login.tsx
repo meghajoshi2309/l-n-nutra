@@ -1,9 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
-import axios from 'axios'
-import styled, { keyframes } from 'styled-components'
-import { useIsMobile } from '../../../Hook/isMobileView';
-import { log } from 'console';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import styled, { keyframes } from "styled-components";
+import { useIsMobile } from "../../../Hook/isMobileView";
+import { log } from "console";
+import { useNavigate } from "react-router-dom";
 
 const illustrations = [
   '/product-1.jpeg?height=400&width=400',
@@ -18,9 +18,12 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px
-  `;
+  padding: 20px;
 
+  @media (max-width: 768px) {
+    padding: 0px;
+  }
+`;
 
 const Card = styled.div`
   background: white;
@@ -30,14 +33,13 @@ const Card = styled.div`
   max-width: 1000px;
   height: 35rem;
   display: flex;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
     flex-direction: column;
     background: transparent;
-  }`;
-
-
+  }
+`;
 
 const IllustrationSection = styled.div`
   flex: 1.5;
@@ -66,15 +68,28 @@ const IllustrationImage = styled.img`
   position: absolute; /* Optional: if you need absolute positioning for animations */
 `;
 
-
 const FormSection = styled.div`
   flex: 1;
-  padding: 40px
-  `;
+  padding: 40px;
+  text-align: center; /* Center-align text */
+  max-width: 400px; /* Restrict the width for better alignment */
+  margin: auto; /* Center it on the page */
 
+  @media (max-width: 768px) {
+    border: 2px solid #444; /* Subtle border */
+    border-radius: 12px; /* Smooth rounded corners */
+    background: linear-gradient(
+      145deg,
+      #1e1e1e,
+      #2b2b2b
+    ); /* Stylish gradient background */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2),
+      inset 0 2px 4px rgba(255, 255, 255, 0.1); /* Outer and inner shadows */
+  }
+`;
 
 const Title = styled.h1`
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 70px;
   text-align: center;
 
@@ -111,23 +126,26 @@ const Input = styled.input`
   &:focus + label,
   &:not(:placeholder-shown) + label {
     transform: translateY(-20px);
-    font-size: 12px;
-    color: #137903;
+    font-size: 14px;
+    color: #666;
   }
 
   @media (max-width: 768px) {
     color: white;
     background: transparent;
 
-    &:focus {
-      border-bottom-color: #666;
-    }
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background-color: #222; /* Match the dark background */
+    color: #fff; /* White text for contrast */
+    outline: none;
+    font-size: 16px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5); /* Subtle inner shadow */
+    transition: all 0.3s ease;
 
-    &:focus + label,
-    &:not(:placeholder-shown) + label {
-      transform: translateY(-20px);
-      font-size: 12px;
-      color: #666;
+    &:focus {
+      border-bottom-color: #666; /* Highlighted border on focus */
     }
   }
 `;
@@ -135,7 +153,7 @@ const Input = styled.input`
 const Label = styled.label`
   position: absolute;
   left: 0;
-  top: 10px;
+  top: 8px;
   font-size: 16px;
   color: #666;
   transition: all 0.3s ease;
@@ -144,7 +162,7 @@ const Label = styled.label`
 
 const EyeIcon = styled.div<{ $isOpen: boolean }>`
   position: absolute;
-  right: 0;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   width: 24px;
@@ -174,11 +192,10 @@ const EyeShape = styled.div<{ $isOpen: boolean }>`
     border-bottom: 1.5px solid #000000;
     height: 6px;
     transform: none;
-    overflow: visible;`
-  }
+    overflow: visible;`}
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 7px;
     height: 7px;
@@ -190,34 +207,31 @@ const EyeShape = styled.div<{ $isOpen: boolean }>`
     ${(props) => !props.$isOpen && `display: none;`}
   }
 
-  @media (max-width: 768px){
+  @media (max-width: 768px) {
     border: 1.5px solid white;
 
     ${(props) =>
-    !props.$isOpen &&
-
-    `border: none;
+      !props.$isOpen &&
+      `border: none;
     border-bottom: 1.5px solid white;
     height: 6px;
     transform: none;
-    overflow: visible;`
-  }
+    overflow: visible;`}
 
-  &::before {
-    content: '';
-    position: absolute;
-    width: 7px;
-    height: 7px;
-    background: white;
-    border-radius: 50%;
-    top: 2px;
-    left: 5px;
-    transition: transform 0.3s ease;
-    ${(props) => !props.$isOpen && `display: none;`}
-  }
+    &::before {
+      content: "";
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 5px;
+      transition: transform 0.3s ease;
+      ${(props) => !props.$isOpen && `display: none;`}
+    }
   }
 `;
-
 
 const EyePupil = styled.div<{ $x: number; $y: number }>`
   position: absolute;
@@ -225,8 +239,8 @@ const EyePupil = styled.div<{ $x: number; $y: number }>`
   height: 5px;
   background: #fbf7f7;
   border-radius: 50%;
-  top: ${props => 2 + props.$y * 2}px;
-  left: ${props => 5 + props.$x * 2}px;
+  top: ${(props) => 2 + props.$y * 2}px;
+  left: ${(props) => 5 + props.$x * 2}px;
   transition: all 0.1s ease;
 `;
 
@@ -240,7 +254,7 @@ const Button = styled.button`
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s ease;
-  margin-top: 45px;
+  margin-top: 10px;
 
   &:hover {
     /* background: linear-gradient(135deg, #488e68, #1a7142, #000000); */
@@ -248,8 +262,23 @@ const Button = styled.button`
   }
 
   @media (max-width: 768px) {
-    background: white;
-    color: black;
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border: none;
+    border-radius: 8px;
+    background-color: #4caf50; /* Green for call-to-action */
+    color: #fff; /* White text */
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #45a049;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
   }
 `;
 
@@ -264,20 +293,21 @@ const Link = styled.a`
   color: #137903;
   text-decoration: none;
   cursor: pointer;
+  margin-left: 10px;
 
   &:hover {
     text-decoration: underline;
   }
   @media (max-width: 768px) {
-    color:#68f752;
+    color: #68f752;
   }
-  `;
-
+`;
 
 const SignupText = styled.div`
-  text-align: 'center';
-  margin-top: '10px';
-  color: 'black';
+  display: flex;
+  font-size: 18px;
+  margin-top: 10px;
+  justify-content: center;
 
   @media (max-width: 768px) {
     color: white;
@@ -285,16 +315,15 @@ const SignupText = styled.div`
 `;
 
 const Login = () => {
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   // const [rememberMe, setRememberMe] = useState(false)
-  const [error, setError] = useState('')
-  const [currentImage, setCurrentImage] = useState(0)
+  const [error, setError] = useState("");
+  const [currentImage, setCurrentImage] = useState(0);
 
-  const [showPassword, setShowPassword] = useState(false)
-  const [pupilPosition, setPupilPosition] = useState({ x: 0, y: 0 })
-  const eyeRef = useRef<HTMLDivElement>(null)
+  const [showPassword, setShowPassword] = useState(false);
+  const [pupilPosition, setPupilPosition] = useState({ x: 0, y: 0 });
+  const eyeRef = useRef<HTMLDivElement>(null);
 
   const isMobileView = useIsMobile();
   const navigate = useNavigate();
@@ -302,50 +331,56 @@ const Login = () => {
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (eyeRef.current && showPassword) {
-        const eye = eyeRef.current.getBoundingClientRect()
-        const eyeCenterX = eye.left + eye.width / 2
-        const eyeCenterY = eye.top + eye.height / 2
+        const eye = eyeRef.current.getBoundingClientRect();
+        const eyeCenterX = eye.left + eye.width / 2;
+        const eyeCenterY = eye.top + eye.height / 2;
 
         // Calculate angle between mouse and eye center
-        const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX)
+        const angle = Math.atan2(
+          e.clientY - eyeCenterY,
+          e.clientX - eyeCenterX
+        );
 
         // Convert angle to x,y coordinates within range -1 to 1
-        const x = Math.cos(angle)
-        const y = Math.sin(angle)
+        const x = Math.cos(angle);
+        const y = Math.sin(angle);
 
-        setPupilPosition({ x, y })
+        setPupilPosition({ x, y });
       }
-    }
+    };
 
     if (showPassword) {
-      window.addEventListener('mousemove', handleMouseMove)
+      window.addEventListener("mousemove", handleMouseMove);
     }
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-    }
-  }, [showPassword])
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [showPassword]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % illustrations.length)
-    }, 2000)
-    return () => clearInterval(interval)
-  }, [])
+      setCurrentImage((prev) => (prev + 1) % illustrations.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:5000/api/users/login`, { email, password })
-      console.log('Login Successful:', response.data)
-      if(response.data){
+      const response = await axios.post(
+        `http://localhost:5000/api/users/login`,
+        { email, password }
+      );
+      console.log("Login Successful:", response.data);
+      if (response.data) {
         localStorage.setItem("isLoggedIn", "true");
-        navigate("/")
+        navigate("/");
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'An error occurred')
+      setError(err.response?.data?.message || "An error occurred");
     }
-  }
+  };
 
   return (
     <Container>
@@ -387,16 +422,25 @@ const Login = () => {
                 $isOpen={showPassword}
                 ref={eyeRef}
               >
-                {showPassword && <EyeShape $isOpen={showPassword}>
-                  {showPassword && (
-                    <EyePupil
-                      $x={pupilPosition.x}
-                      $y={pupilPosition.y}
-                    />
-                  )}
-                </EyeShape>}
-                {!showPassword && !isMobileView && <img src='close_eye.png' style={{ width: '24px', height: '24px' }} />}
-                {!showPassword && isMobileView && <img src='white_close_eye.png' style={{ width: '24px', height: '24px' }} />}
+                {showPassword && (
+                  <EyeShape $isOpen={showPassword}>
+                    {showPassword && (
+                      <EyePupil $x={pupilPosition.x} $y={pupilPosition.y} />
+                    )}
+                  </EyeShape>
+                )}
+                {!showPassword && !isMobileView && (
+                  <img
+                    src="close_eye.png"
+                    style={{ width: "24px", height: "24px" }}
+                  />
+                )}
+                {!showPassword && isMobileView && (
+                  <img
+                    src="white_close_eye.png"
+                    style={{ width: "24px", height: "24px" }}
+                  />
+                )}
               </EyeIcon>
             </InputGroup>
 
@@ -409,7 +453,7 @@ const Login = () => {
         </FormSection>
       </Card>
     </Container>
-  )
-}
+  );
+};
 
 export default Login;
