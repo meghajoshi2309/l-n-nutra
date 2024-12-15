@@ -8,6 +8,8 @@ import Home from "./components/Home/Home";
 import Login from "./components/Auth/Login/Login";
 import Register from "./components/Auth/Register/Register";
 import Cart from "./components/Cart/Cart";
+import ContactUsPage from "./components/ContactUs/ContactUs";
+import About from "./components/About/About";
 
 const App: React.FC = () => {
   return (
@@ -21,10 +23,11 @@ const App: React.FC = () => {
           element={
             <Layout>
               <Routes>
+                <Route path="/contact" element={<ContactUsPage/>} />
+                <Route path="/about" element={<About />} />
                 <Route path="/" element={<Home />} />
-                {/* <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/blogs" element={<Blogs />} /> */}
+
+                {/*       <Route path="/blogs" element={<Blogs />} /> */}
               </Routes>
             </Layout>
           }
