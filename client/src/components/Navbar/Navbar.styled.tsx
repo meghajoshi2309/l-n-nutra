@@ -30,6 +30,9 @@ export const MainContent = styled.div`
 `;
 
 export const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   @media (max-width: 768px) {
     position: absolute;
     left: 50%;
@@ -41,6 +44,15 @@ export const Logo = styled.img`
   height: 40px;
   width: auto;
 `;
+
+export const LogoText = styled.div`
+  color: white;
+  font-weight: bold;
+  background: linear-gradient(90deg, #93f804, #c6ed95);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+`
 
 export const NavLinks = styled.nav<{ hasBorder?: boolean }>`
   display: flex;

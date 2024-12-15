@@ -119,6 +119,12 @@ const Input = styled.input`
   font-size: 16px;
   transition: all 0.3s ease;
 
+  /* Remove background color when the input is autofilled */
+  &::-webkit-internal-autofill-selected {
+    background-color: red !important;
+    color: inherit !important;
+  }
+
   &:focus {
     border-bottom-color: #137903;
   }
@@ -147,8 +153,14 @@ const Input = styled.input`
     &:focus {
       border-bottom-color: #666; /* Highlighted border on focus */
     }
+
+    &:focus + label,
+    &:not(:placeholder-shown) + label {
+      transform: translateY(-32px);
+    }
   }
 `;
+
 
 const Label = styled.label`
   position: absolute;
@@ -158,6 +170,11 @@ const Label = styled.label`
   color: #666;
   transition: all 0.3s ease;
   pointer-events: none;
+
+  @media (max-width: 768px) {
+    left: 5px;
+    top: 20px;
+  }
 `;
 
 const EyeIcon = styled.div<{ $isOpen: boolean }>`
@@ -211,8 +228,8 @@ const EyeShape = styled.div<{ $isOpen: boolean }>`
     border: 1.5px solid white;
 
     ${(props) =>
-      !props.$isOpen &&
-      `border: none;
+    !props.$isOpen &&
+    `border: none;
     border-bottom: 1.5px solid white;
     height: 6px;
     transform: none;

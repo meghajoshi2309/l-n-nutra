@@ -6,11 +6,6 @@ const fadeIn = keyframes`
   to { opacity: 1; }
 `;
 
-const slideUp = keyframes`
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-`;
-
 // Main container
 export const HomeContainer = styled.div`
   min-height: 100vh;
@@ -89,84 +84,19 @@ export const HeroText = styled.p`
   }
 `;
 
-// Products Section
-export const ProductsSection = styled.section`
-  margin-top: 2rem;
-`;
 
-export const ProductGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-`;
 
-export const ProductCard = styled.div<{ color: string }>`
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease;
-  animation: ${slideUp} 0.5s ease-out;
 
-  &:hover {
-    transform: translateY(-5px);
-  }
 
-  img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-bottom: 4px solid ${(props) => props.color};
-  }
-`;
 
-export const ProductTitle = styled.h2`
-  font-size: 1.25rem;
-  margin: 1rem;
-  color: #333;
-`;
 
-export const ProductDescription = styled.p`
-  font-size: 0.9rem;
-  margin: 0 1rem 1rem;
-  color: #666;
-`;
 
-export const ProductPrice = styled.span`
-  display: block;
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin: 1rem;
-  color: #2575fc;
-`;
 
-export const Content = styled.div`
-  position: relative;
-  padding-top: 200px;
-  padding-left: 5%;
-  color: white;
-  z-index: 1;
-`;
 
-export const Title = styled.h1`
-  font-size: 4rem;
-  color: #4caf50;
-  margin-bottom: 2rem;
-  max-width: 800px;
-`;
 
-export const Description = styled.p`
-  font-size: 1.2rem;
-  color: #cccccc;
-  max-width: 600px;
-  line-height: 1.6;
-`;
-// export const HomeContainer = styled.div`
-//   max-width: 100%;
-//   margin: 0 auto;
-//   padding: 1rem;
 
-//   @media (min-width: 768px) {
-//     padding: 2rem;
-//   }
-// `;
+
+
+
+
+

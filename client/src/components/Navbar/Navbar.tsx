@@ -26,6 +26,7 @@ import {
   MobileSearchInput,
   MobileSearchActions,
   MobileSearchCloseButton,
+  LogoText,
 } from "../Navbar/Navbar.styled";
 import { useIsMobile } from "../../Hook/isMobileView";
 
@@ -73,7 +74,7 @@ export const Navbar: React.FC = () => {
     <>
       {/* Navbar */}
       <NavbarContainer>
-        <div style={{ display: "flex", alignItems:'center'}}>
+        <div style={{ display: "flex", alignItems: 'center' }}>
           {/* Mobile Menu Button */}
           <MobileMenuButton onClick={toggleMenu}>
             <svg
@@ -120,7 +121,8 @@ export const Navbar: React.FC = () => {
         <LogoContainer>
           <Link to="/">
             <Logo src="/logo.jpeg" alt="Logo" />
-          </Link>
+          </Link>&nbsp;
+          <LogoText>L-N Nutra</LogoText>
         </LogoContainer>
 
         {/* Desktop Nav Links */}
@@ -143,14 +145,14 @@ export const Navbar: React.FC = () => {
 
           {/* Profile Icon */}
           {isMobile ? (
-              <img src="/profile.png" alt="Profile" width={25} height={25} onClick={() => navigate('/login')}/>
+            <img src="/profile.png" alt="Profile" width={25} height={25} onClick={() => navigate('/login')} />
           ) : (
             <LoginButton onClick={() => navigate('/login')}>Login</LoginButton>
           )}
 
           {/* Cart Icon */}
           <CartButton>
-            <img src="/cart.png" alt="Cart Icon" width="25" height="25" onClick={() => navigate("/cart")}/>
+            <img src="/cart.png" alt="Cart Icon" width="25" height="25" onClick={() => navigate("/cart")} />
             {cartItemCount > 0 && <CartCount>{cartItemCount}</CartCount>}
           </CartButton>
         </RightSection>
