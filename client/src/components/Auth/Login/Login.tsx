@@ -2,15 +2,16 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import styled, { keyframes } from "styled-components";
 import { useIsMobile } from "../../../Hook/isMobileView";
-import { log } from "console";
+import { toast } from "react-toastify";
+import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
 
 const illustrations = [
-  '/product-1.jpeg?height=400&width=400',
-  '/product-2.jpeg?height=400&width=400',
-  '/product-3.jpeg?height=400&width=400',
-]
-
+  "/product-1.jpeg?height=400&width=400",
+  "/product-2.jpeg?height=400&width=400",
+  "/product-3.jpeg?height=400&width=400",
+];
 
 const Container = styled.div`
   min-height: 100vh;
@@ -161,7 +162,6 @@ const Input = styled.input`
   }
 `;
 
-
 const Label = styled.label`
   position: absolute;
   left: 0;
@@ -228,8 +228,8 @@ const EyeShape = styled.div<{ $isOpen: boolean }>`
     border: 1.5px solid white;
 
     ${(props) =>
-    !props.$isOpen &&
-    `border: none;
+      !props.$isOpen &&
+      `border: none;
     border-bottom: 1.5px solid white;
     height: 6px;
     transform: none;
@@ -331,11 +331,15 @@ const SignupText = styled.div`
   }
 `;
 
+const ValidationError = styled.span`
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #fa5c7c;
+`;
+
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   // const [rememberMe, setRememberMe] = useState(false)
-  const [error, setError] = useState("");
   const [currentImage, setCurrentImage] = useState(0);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -382,22 +386,13 @@ const Login = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        `http://localhost:5000/api/users/login`,
-        { email, password }
-      );
-      console.log("Login Successful:", response.data);
-      if (response.data) {
-        localStorage.setItem("isLoggedIn", "true");
-        navigate("/");
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.message || "An error occurred");
-    }
-  };
+  const loginSchema = yup.object({
+    email: yup.string().email().required("Email is required"),
+    password: yup
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
+  });
 
   return (
     <Container>
@@ -410,63 +405,102 @@ const Login = () => {
         </IllustrationSection>
         <FormSection>
           <Title>Welcome back!</Title>
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-          <Form onSubmit={handleSubmit}>
-            <InputGroup>
-              <Input
-                type="email"
-                id="email"
-                placeholder=" "
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <Label htmlFor="email">Email</Label>
-            </InputGroup>
-
-            <InputGroup>
-              <Input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                placeholder=" "
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <Label htmlFor="password">Password</Label>
-              <EyeIcon
-                onClick={() => setShowPassword(!showPassword)}
-                $isOpen={showPassword}
-                ref={eyeRef}
+          <Formik
+            initialValues={{
+              email: "",
+              password: "",
+            }}
+            validationSchema={loginSchema}
+            onSubmit={async (values) => {
+              try {
+                const response = await axios.post(
+                  `http://localhost:5000/api/auth/login`,
+                  values
+                );
+                toast.success("Login successful!");
+                if (response.data) {
+                  localStorage.setItem("isLoggedIn", "true");
+                  navigate("/");
+                }
+              } catch (err: any) {
+                toast.error("An error occured during login.");
+              }
+            }}
+          >
+            {(formik) => (
+              <Form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  formik.handleSubmit();
+                }}
               >
-                {showPassword && (
-                  <EyeShape $isOpen={showPassword}>
+                <InputGroup>
+                  <Input
+                    type="text"
+                    name="email"
+                    id="email"
+                    placeholder=" "
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                  />
+                  <Label htmlFor="email">
+                    Email <span style={{ color: "red" }}>*</span>{" "}
+                  </Label>
+                  {formik.errors.email && formik.touched.email && (
+                    <ValidationError>{formik.errors.email}</ValidationError>
+                  )}
+                </InputGroup>
+
+                <InputGroup>
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    id="password"
+                    placeholder=" "
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                  />
+                  <Label htmlFor="password">
+                    Password <span style={{ color: "red" }}>*</span>{" "}
+                  </Label>
+                  {formik.errors.password && formik.touched.password && (
+                    <ValidationError>{formik.errors.password}</ValidationError>
+                  )}
+                  <EyeIcon
+                    onClick={() => setShowPassword(!showPassword)}
+                    $isOpen={showPassword}
+                    ref={eyeRef}
+                  >
                     {showPassword && (
-                      <EyePupil $x={pupilPosition.x} $y={pupilPosition.y} />
+                      <EyeShape $isOpen={showPassword}>
+                        {showPassword && (
+                          <EyePupil $x={pupilPosition.x} $y={pupilPosition.y} />
+                        )}
+                      </EyeShape>
                     )}
-                  </EyeShape>
-                )}
-                {!showPassword && !isMobileView && (
-                  <img
-                    src="close_eye.png"
-                    style={{ width: "24px", height: "24px" }}
-                  />
-                )}
-                {!showPassword && isMobileView && (
-                  <img
-                    src="white_close_eye.png"
-                    style={{ width: "24px", height: "24px" }}
-                  />
-                )}
-              </EyeIcon>
-            </InputGroup>
+                    {!showPassword && !isMobileView && (
+                      <img
+                        src="close_eye.png"
+                        style={{ width: "24px", height: "24px" }}
+                      />
+                    )}
+                    {!showPassword && isMobileView && (
+                      <img
+                        src="white_close_eye.png"
+                        style={{ width: "24px", height: "24px" }}
+                      />
+                    )}
+                  </EyeIcon>
+                </InputGroup>
 
-            <Button type="submit">Login</Button>
+                <Button type="submit">Login</Button>
 
-            <SignupText>
-              Don't have an account? <Link href="/register">Sign Up</Link>
-            </SignupText>
-          </Form>
+                <SignupText>
+                  Don't have an account? <Link href="/register">Sign Up</Link>
+                </SignupText>
+              </Form>
+            )}
+          </Formik>
         </FormSection>
       </Card>
     </Container>

@@ -10,31 +10,32 @@ import Register from "./components/Auth/Register/Register";
 import Cart from "./components/Cart/Cart";
 import ContactPage from "./components/ContactUs/ContactUs";
 import ProductForm from "./components/Product/AddProductForm/AddProductForm";
+import { ToastContainer } from "react-toastify";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App: React.FC = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route
-          path="*"
-          element={
-            <Layout>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/product" element={<ProductForm />} />
-                {/* <Route path="/about" element={<About />} />
-               
-                <Route path="/blogs" element={<Blogs />} /> */}
-              </Routes>
-            </Layout>
-          }
-        />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/cart" element={<Cart />} />
+      <Route
+        path="*"
+        element={
+          <Layout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/product" element={<ProductForm />} />
+            </Routes>
+          </Layout>
+        }
+      />
+    </Routes>
+    <ToastContainer />
+  </Router>
   );
 };
 

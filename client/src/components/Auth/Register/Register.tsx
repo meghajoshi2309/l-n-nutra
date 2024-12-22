@@ -3,6 +3,9 @@ import axios from 'axios';
 import styled, { keyframes } from 'styled-components';
 import { useIsMobile } from '../../../Hook/isMobileView';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Formik } from 'formik';
+import * as yup from 'yup';
 
 const illustrations = [
   '/product-1.jpeg?height=400&width=400',
@@ -67,7 +70,7 @@ const IllustrationImage = styled.img`
 
 const FormSection = styled.div`
   flex: 1;
-  padding: 30px
+  padding: 30px;
   `;
 
 
@@ -282,21 +285,23 @@ const SignupText = styled.div`
   }
 `;
 
-const Registration = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [currentImage, setCurrentImage] = useState(0);
+const ValidationError = styled.span`
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #fa5c7c;
+`;
 
+const Registration = () => {
+  const [currentImage, setCurrentImage] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [pupilPosition, setPupilPosition] = useState({ x: 0, y: 0 });
-  const eyeRef = useRef<HTMLDivElement>(null);
 
+  const eyeRef = useRef<HTMLDivElement>(null);
   const isMobileView = useIsMobile();
   const navigate = useNavigate();
 
+  // Handle mouse movement for eye pupil
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (eyeRef.current && showPassword) {
@@ -321,6 +326,7 @@ const Registration = () => {
     };
   }, [showPassword]);
 
+  // Rotate illustrations
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % illustrations.length);
@@ -328,27 +334,15 @@ const Registration = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-    try {
-      const response = await axios.post('http://localhost:5000/api/users/register', {
-        username,
-        email,
-        password,
-        confirmPassword
-      });
-      console.log('Registration Successful:', response.data);
-      if (response.data) {
-        navigate("/login")
-      }
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'An error occurred');
-    }
-  };
+  const registrationSchema = yup.object({
+    username: yup.string().min(3, 'Username must be at least 3 characters').required("Username is required"),
+    email: yup.string().email().required("Email is required"),
+    password: yup.string().min(6, 'Password must be at least 6 characters').required("Password is required"),
+    confirmPassword: yup
+      .string()
+      .min(6, 'Confirm Password must be at least 6 characters')
+      .oneOf([yup.ref('password')], 'Passwords do not match').required("Confirm Password is required"),
+  });
 
   return (
     <Container>
@@ -361,92 +355,134 @@ const Registration = () => {
         </IllustrationSection>
         <FormSection>
           <Title>Create an Account</Title>
-          {error && <ErrorMessage>{error}</ErrorMessage>}
-          <Form onSubmit={handleSubmit}>
-            <InputGroup>
-              <Input
-                type="text"
-                id="username"
-                placeholder=" "
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-              <Label htmlFor="username">Username</Label>
-            </InputGroup>
+          {/* {error && <ErrorMessage>{error}</ErrorMessage>} */}
+          <Formik
+            initialValues={{
+              username: '',
+              email: '',
+              password: '',
+              confirmPassword: '',
+            }}
+            validationSchema={registrationSchema}
+            onSubmit={async (values) => {
+              try {
+                const response = await axios.post('http://localhost:5000/api/auth/register', values);
+                toast.success('Registration successful!');
+                navigate('/login');
+              } catch (err) {
+                toast.error('An error occurred during registration.');
+              }
+            }}
+          >
+            {formik => (
+              <Form onSubmit={e => {
+                e.preventDefault();
+                formik.handleSubmit();
+              }}>
+                <InputGroup>
+                  <Input
+                    type="text"
+                    name='username'
+                    id="username"
+                    placeholder=" "
+                    value={formik.values.username}
+                    onChange={formik.handleChange}
+                  />
+                  <Label htmlFor="username">Username  <span style={{ color: "red" }}>*</span></Label>
+                  {formik.errors.username && formik.touched.username && (
+                    <ValidationError>{formik.errors.username}</ValidationError>
+                  )}
+                </InputGroup>
 
-            <InputGroup>
-              <Input
-                type="email"
-                id="email"
-                placeholder=" "
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <Label htmlFor="email">Email</Label>
-            </InputGroup>
+                <InputGroup>
+                  <Input
+                    type="text"
+                    name='email'
+                    id="email"
+                    placeholder=" "
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                  />
+                  <Label htmlFor="email">Email  <span style={{ color: "red" }}>*</span> </Label>
+                  {formik.errors.email && formik.touched.email && (
+                   <ValidationError>{formik.errors.email}</ValidationError>
+                  )}
+                </InputGroup>
 
-            <InputGroup>
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                placeholder=" "
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <Label htmlFor="password">Password</Label>
-              <EyeIcon
-                onClick={() => setShowPassword(!showPassword)}
-                $isOpen={showPassword}
-                ref={eyeRef}
-              >
-                {showPassword && (
-                  <EyeShape $isOpen={showPassword}>
+                <InputGroup>
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    name='password'
+                    placeholder=" "
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                  />
+                  <Label htmlFor="password">Password <span style={{ color: "red" }}>*</span></Label>
+                  {formik.errors.password && formik.touched.password && (
+                   <ValidationError>{formik.errors.password}</ValidationError>
+                  )}
+                  <EyeIcon
+                    onClick={() => setShowPassword(!showPassword)}
+                    $isOpen={showPassword}
+                    ref={eyeRef}
+                  >
                     {showPassword && (
-                      <EyePupil $x={pupilPosition.x} $y={pupilPosition.y} />
+                      <EyeShape $isOpen={showPassword}>
+                        <EyePupil $x={pupilPosition.x} $y={pupilPosition.y} />
+                      </EyeShape>
                     )}
-                  </EyeShape>
-                )}
-                {!showPassword && !isMobileView && <img src='close_eye.png' style={{ width: '24px', height: '24px' }} />}
-                {!showPassword && isMobileView && <img src='white_close_eye.png' style={{ width: '24px', height: '24px' }} />}
-              </EyeIcon>
-            </InputGroup>
+                    {!showPassword && !isMobileView && (
+                      <img src="close_eye.png" alt="Close Eye" style={{ width: '24px', height: '24px' }} />
+                    )}
+                    {!showPassword && isMobileView && (
+                      <img src="white_close_eye.png" alt="White Close Eye" style={{ width: '24px', height: '24px' }} />
+                    )}
+                  </EyeIcon>
+                </InputGroup>
 
-            <InputGroup>
-              <Input
-                type={showPassword ? 'text' : 'password'}
-                id="confirmPassword"
-                placeholder=" "
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <EyeIcon
-                onClick={() => setShowPassword(!showPassword)}
-                $isOpen={showPassword}
-                ref={eyeRef}
-              >
-                {showPassword && (
-                  <EyeShape $isOpen={showPassword}>
+                <InputGroup>
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder=" "
+                    value={formik.values.confirmPassword}
+                    onChange={formik.handleChange}
+                  />
+                  <Label htmlFor="confirmPassword">Confirm Password <span style={{ color: "red" }}>*</span></Label>
+                  {formik.errors.confirmPassword && formik.touched.confirmPassword && (
+                   <ValidationError>{formik.errors.confirmPassword}</ValidationError>
+                  )}
+                  <EyeIcon
+                    onClick={() => setShowPassword(!showPassword)}
+                    $isOpen={showPassword}
+                    ref={eyeRef}
+                  >
                     {showPassword && (
-                      <EyePupil $x={pupilPosition.x} $y={pupilPosition.y} />
+                      <EyeShape $isOpen={showPassword}>
+                        <EyePupil $x={pupilPosition.x} $y={pupilPosition.y} />
+                      </EyeShape>
                     )}
-                  </EyeShape>
-                )}
-                {!showPassword && !isMobileView && <img src='close_eye.png' style={{ width: '24px', height: '24px' }} />}
-                {!showPassword && isMobileView && <img src='white_close_eye.png' style={{ width: '24px', height: '24px' }} />}
-              </EyeIcon>
-            </InputGroup>
+                    {!showPassword && !isMobileView && (
+                      <img src="close_eye.png" alt="Close Eye" style={{ width: '24px', height: '24px' }} />
+                    )}
+                    {!showPassword && isMobileView && (
+                      <img src="white_close_eye.png" alt="White Close Eye" style={{ width: '24px', height: '24px' }} />
+                    )}
+                  </EyeIcon>
+                </InputGroup>
 
-            <Button type="submit">Register</Button>
+                <Button type="submit">Register</Button>
 
-            <SignupText>
-              Already have an account? <Link href="/login">Log In</Link>
-            </SignupText>
-          </Form>
+                <SignupText>
+                  Already have an account? <Link href="/login">Log In</Link>
+                </SignupText>
+              </Form>
+            )}
+          </Formik>
+
+
         </FormSection>
       </Card>
     </Container>
