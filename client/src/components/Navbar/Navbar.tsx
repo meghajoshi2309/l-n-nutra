@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   NavbarContainer,
@@ -29,6 +29,7 @@ import {
   LogoText,
 } from "../Navbar/Navbar.styled";
 import { useIsMobile } from "../../Hook/isMobileView";
+import { AuthContext } from "../../context/AuthContext";
 
 const navItems = [
   { title: "Home", href: "/" },
@@ -43,8 +44,8 @@ export const Navbar: React.FC = () => {
   const [cartItemCount, setCartItemCount] = useState(2);
   const [hasBorder, setHasBorder] = useState(false);
 
+  const { user, logout } = useContext(AuthContext); // Access user and logout function from AuthContext
   const isMobile = useIsMobile();
-
   const navigate = useNavigate();
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -52,29 +53,30 @@ export const Navbar: React.FC = () => {
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const closeMenu = () => setIsMenuOpen(false);
   const toggleMobileSearch = () => setIsMobileSearchOpen((prev) => !prev);
-  const closeMobileSearch = () => { setIsMobileSearchOpen(false) };
+  const closeMobileSearch = () => setIsMobileSearchOpen(false);
+
+  const handleLogout = () => {
+    logout(); // Clear user data from context
+    navigate("/"); // Redirect to login page
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       setHasBorder(window.scrollY > 0);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-
-
-
 
   return (
     <>
       {/* Navbar */}
       <NavbarContainer>
-        <div style={{ display: "flex", alignItems: 'center' }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
           {/* Mobile Menu Button */}
           <MobileMenuButton onClick={toggleMenu}>
             <svg
@@ -86,13 +88,12 @@ export const Navbar: React.FC = () => {
               strokeWidth="2"
             >
               <path d="M3 12h18M3 6h18M3 18h18" />
-            </svg>&nbsp;&nbsp;&nbsp;
+            </svg>
+            &nbsp;&nbsp;&nbsp;
           </MobileMenuButton>
 
           <MobileSearchContainer>
-            <MobileSearchIcon
-              onClick={toggleMobileSearch}
-            >
+            <MobileSearchIcon onClick={toggleMobileSearch}>
               <img src="/search.png" alt="Search Icon" width={20} height={20} />
             </MobileSearchIcon>
             {/* Mobile Search Overlay */}
@@ -106,7 +107,12 @@ export const Navbar: React.FC = () => {
                   />
                   <MobileSearchActions>
                     <MobileSearchIcon>
-                      <img src="/search.png" alt="Search Icon" width={20} height={20} />
+                      <img
+                        src="/search.png"
+                        alt="Search Icon"
+                        width={20}
+                        height={20}
+                      />
                     </MobileSearchIcon>
                     <MobileSearchCloseButton onClick={closeMobileSearch}>
                       ✕
@@ -121,7 +127,8 @@ export const Navbar: React.FC = () => {
         <LogoContainer>
           <Link to="/">
             <Logo src="/logo.jpeg" alt="Logo" />
-          </Link>&nbsp;
+          </Link>
+          &nbsp;
           <LogoText>L-N Nutra</LogoText>
         </LogoContainer>
 
@@ -136,6 +143,7 @@ export const Navbar: React.FC = () => {
 
         {/* Right Section (Search, Profile, Cart) */}
         <RightSection>
+          {/* Search */}
           <SearchContainer>
             <SearchInput type="text" placeholder="Search here..." />
             <SearchIcon>
@@ -143,19 +151,63 @@ export const Navbar: React.FC = () => {
             </SearchIcon>
           </SearchContainer>
 
-          {/* Profile Icon */}
-          {isMobile ? (
-            <img src="/profile.png" alt="Profile" width={25} height={25} onClick={() => navigate('/login')} />
+          {/* User Section */}
+          {user ? (
+            <>
+              {isMobile ? (
+                <>
+                  {/* Profile Icon */}
+                  <img
+                    src="/profile.png"
+                    alt="Profile"
+                    width={25}
+                    height={25}
+                    onClick={() => navigate("/profile")}
+                    style={{ marginRight: "10px" }}
+                  />
+                  {/* Logout Icon */}
+                  <img
+                    src="/logout.png"
+                    alt="Logout"
+                    width={25}
+                    height={25}
+                    onClick={handleLogout}
+                  />
+                </>
+              ) : (
+                <>
+                  <NavLink>{user.userName}</NavLink>
+                  <LoginButton onClick={handleLogout}>Logout</LoginButton>
+                </>
+              )}
+            </>
           ) : (
-            <LoginButton onClick={() => navigate('/login')}>Login</LoginButton>
+            isMobile ? (
+              <img
+                src="/profile.png"
+                alt="Profile"
+                width={25}
+                height={25}
+                onClick={() => navigate("/login")}
+              />
+            ) : (
+              <LoginButton onClick={() => navigate("/login")}>Login</LoginButton>
+            )
           )}
 
           {/* Cart Icon */}
           <CartButton>
-            <img src="/cart.png" alt="Cart Icon" width="25" height="25" onClick={() => navigate("/cart")} />
+            <img
+              src="/cart.png"
+              alt="Cart Icon"
+              width="25"
+              height="25"
+              onClick={() => navigate("/cart")}
+            />
             {cartItemCount > 0 && <CartCount>{cartItemCount}</CartCount>}
           </CartButton>
         </RightSection>
+
       </NavbarContainer>
 
       {/* Mobile Menu */}

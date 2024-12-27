@@ -16,8 +16,13 @@ declare global {
 }
 
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
+  console.log("req",req);
+  
   const token = req.header('Authorization')?.replace('Bearer ', '');
-  if (!token) return res.status(401).json({ error: 'Access denied, token missing' });
+  if (!token) {
+    res.status(401).json({ error: 'Access denied, token missing' });
+    return;
+  }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as UserPayload;
@@ -30,7 +35,8 @@ export const authenticate = (req: Request, res: Response, next: NextFunction) =>
 
 export const authorize = (roles: string[]) => (req: Request, res: Response, next: NextFunction) => {
   if (!req.user || !roles.includes(req.user.role)) {
-    return res.status(403).json({ error: 'Access denied, insufficient permissions' });
+    res.status(403).json({ error: 'Access denied, insufficient permissions' });
+    return;
   }
   next();
 };

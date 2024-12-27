@@ -447,16 +447,10 @@
 // ProductCard.tsx
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { Product } from '../../Type/Product';
+import apiClient from '../../../api/client';
 
-interface Product {
-  ProductId: number;
-  Name: string;
-  Description: string;
-  Price: string;
-  ImageUrl: string;
-  StockQuantity: number;
-  Tag?: string;
-}
+
 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -466,12 +460,12 @@ const ProductList: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/products'); // Replace with your API URL
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
-        const data = await response.json();
-        setProducts(data);
+        const response = await apiClient.get('/products'); // Replace with your API URL
+        // if (!response.ok) {
+        //   throw new Error('Failed to fetch products...');
+        // }
+        // const data = await response.json();
+        setProducts(response.data);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -488,8 +482,8 @@ const ProductList: React.FC = () => {
     <Container>
       {products.map((product) => (
         <ProductCard
-          key={product.ProductId}
-          image={product.ImageUrl}
+          key={product.ProductID}
+          image={product.ImageUrl || ""}
           name={product.Name}
           price={product.Price}
           tag={product.Tag}
