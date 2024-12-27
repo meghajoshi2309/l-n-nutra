@@ -13,6 +13,7 @@ import ProductForm from "./components/Product/AddProductForm/AddProductForm";
 import { ToastContainer } from "react-toastify";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import AboutUs from "./components/AboutUs/AboutUs";
 
 const App: React.FC = () => {
   return (
@@ -29,6 +30,7 @@ const App: React.FC = () => {
               <Route path="/" element={<Home />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/product" element={<ProductForm />} />
+              <Route path="/about" element={<AboutUs/>}/>
             </Routes>
           </Layout>
         }
