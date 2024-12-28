@@ -63,13 +63,14 @@ const ImageContainer = styled.div`
 
   img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
   }
 
   @media (min-width: 768px) {
-    width: 60%;
+    width: 53%;
   }
+
 `
 
 const ProductDetails = styled.div`
@@ -82,6 +83,11 @@ const ProductDetails = styled.div`
   @media (min-width: 768px) {
     width: 40%;
   }
+
+  @media (max-width: 768px) {
+    width: 80%;
+  }
+
 `
 
 const ProductName = styled.h1`
