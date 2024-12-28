@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { 
-  getAllProducts, 
-  getProductById, 
-  createProduct, 
-  updateProduct, 
-  deleteProduct 
+import {
+  getAllProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct
 } from '../services/product.service';
 import { createProductSchema, updateProductSchema } from '../validators/product.validation';
 import { z } from 'zod';
@@ -23,7 +23,10 @@ export const getAllProductsController = async (req: Request, res: Response): Pro
 
 export const getProductByIdController = async (req: Request, res: Response): Promise<void> => {
   const id = parseInt(req.params.id);
-
+  if (!id) {
+    res.status(404).json({ error: 'Product not found' });
+    return;
+  }
   const product = await getProductById(id);
   if (!product) {
     res.status(404).json({ error: 'Product not found' });

@@ -126,17 +126,11 @@ const ProductForm: React.FC = () => {
                 "https://api.cloudinary.com/v1_1/djj0dl6dz/image/upload", // Replace with your Cloudinary URL
                 formDataForImage
             );
-            console.log("cloudinaryResponse", cloudinaryResponse);
-
             const imageUrl = cloudinaryResponse.data.secure_url;
 
-            console.log("imageUrl",imageUrl);
-            
             // Add image URL to form data
             const fullData = { ...formData, ImageUrl: imageUrl };
 
-            console.log("fullData",fullData);
-            
             // Submit the product data
             const response = await axios.post(
                 "http://localhost:5000/api/products",

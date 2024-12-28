@@ -9,26 +9,29 @@ datasource db {
 
 // prisma/schema.prisma
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String
-  email     String   @unique
-  password  String
-  role      String   @default("user")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                     Int      @id @default(autoincrement())
+  username               String
+  email                  String   @unique
+  password               String
+  role                   String   @default("user")
+  defaultShippingAddress Int?
+  defaultBillingAddress  Int?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
   addresses Address[]
+  cartItems CartItem[]
 }
 
 model Address {
-  id Int @id @default(autoincrement())
-  lineOne String
-  lineTwo String?
-  city String
-  country String
-  pincode String
-  userId Int
-  user User @relation(fields: [userId],references: [id])
+  id        Int      @id @default(autoincrement())
+  lineOne   String
+  lineTwo   String?
+  city      String
+  country   String
+  pincode   String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -36,11 +39,26 @@ model Address {
 }
 
 model Product {
-  ProductID     Int     @id @default(autoincrement())
+  id            Int     @id @default(autoincrement())
   Name          String  @db.VarChar(100)
   Description   String? @db.Text
   Price         Decimal @db.Decimal(10, 2)
   Tag           String? @db.VarChar(100)
   ImageUrl      String? @db.VarChar(255)
   StockQuantity Int     @db.Int
+
+  cartItems CartItem[]
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("cart_items")
 }

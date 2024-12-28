@@ -21,8 +21,6 @@ const AdminPanel: React.FC = () => {
     const fetchProducts = async () => {
         try {
             const response = await apiClient.get("/products");
-            console.log("response.data",response.data);
-            
             setProducts(response.data);
         } catch (error) {
             toast.error("Failed to fetch products.");
@@ -42,7 +40,7 @@ const AdminPanel: React.FC = () => {
 
     const handleUpdateProduct = async (values: any) => {
         try {
-            await apiClient.put(`/products/${selectedProduct.ProductID}`, values);
+            await apiClient.put(`/products/${selectedProduct.id}`, values);
             toast.success("Product updated successfully.");
             setShowEditModal(false);
             fetchProducts();
@@ -53,7 +51,7 @@ const AdminPanel: React.FC = () => {
 
     const handleDeleteProduct = async () => {
         try {
-            await apiClient.delete(`/products/${selectedProduct.ProductID}`);
+            await apiClient.delete(`/products/${selectedProduct.id}`);
             toast.success("Product deleted successfully.");
             setShowDeleteModal(false);
             fetchProducts();
@@ -61,11 +59,6 @@ const AdminPanel: React.FC = () => {
             toast.error("Failed to delete product.");
         }
     };
-
-    useEffect(() => {
-console.log("selectedProduct",selectedProduct);
-
-    },[selectedProduct])
 
     return (
         <div className="">
@@ -108,7 +101,7 @@ console.log("selectedProduct",selectedProduct);
                     </thead>
                     <tbody>
                         {products.map((product, index) => (
-                            <tr key={product.ProductID}>
+                            <tr key={product.id}>
                                 <td>{index + 1}</td>
                                 <td>{product.Name}</td>
                                 <td>{product.Price}</td>
@@ -118,8 +111,6 @@ console.log("selectedProduct",selectedProduct);
                                         <Button
                                             variant="primary"
                                             onClick={() => {
-                                                console.log("product....",product);
-                                                
                                                 setSelectedProduct(product);
                                                 setShowEditModal(true);
                                             }}

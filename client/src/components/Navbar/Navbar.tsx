@@ -30,6 +30,8 @@ import {
 } from "../Navbar/Navbar.styled";
 import { useIsMobile } from "../../Hook/isMobileView";
 import { AuthContext } from "../../context/AuthContext";
+import apiClient from "../../api/client"; // Import your API client
+import { useCart } from "../../context/CartContext";
 
 const navItems = [
   { title: "Home", href: "/" },
@@ -41,9 +43,10 @@ const navItems = [
 export const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
-  const [cartItemCount, setCartItemCount] = useState(2);
+  // const [cartItemCount, setCartItemCount] = useState(0); // Initialize to 0
   const [hasBorder, setHasBorder] = useState(false);
 
+  const { cartItemCount } = useCart();
   const { user, logout } = useContext(AuthContext); // Access user and logout function from AuthContext
   const isMobile = useIsMobile();
   const navigate = useNavigate();
@@ -59,6 +62,24 @@ export const Navbar: React.FC = () => {
     logout(); // Clear user data from context
     navigate("/"); // Redirect to login page
   };
+
+
+  // Fetch cart items when user is logged in
+  // useEffect(() => {
+  //   const fetchCartItems = async () => {
+  //     if (user) {
+  //       try {
+  //         const response = await apiClient.get("/cart"); // Call your cart API
+  //         const cartItems = response.data; // Assuming the response contains cart items
+  //         setCartItemCount(cartItems.length); // Set the cart item count
+  //       } catch (error) {
+  //         console.error("Failed to fetch cart items:", error);
+  //       }
+  //     }
+  //   };
+
+  //   fetchCartItems();
+  // }, [user]); // Re-run when user changes
 
   useEffect(() => {
     const handleScroll = () => {
@@ -202,12 +223,17 @@ export const Navbar: React.FC = () => {
               alt="Cart Icon"
               width="25"
               height="25"
-              onClick={() => navigate("/cart")}
+              onClick={() => {
+                if (!user) {
+                  navigate("/login"); // Redirect to login if not logged in
+                } else {
+                  navigate("/cart"); // Navigate to cart if logged in
+                }
+              }}
             />
             {cartItemCount > 0 && <CartCount>{cartItemCount}</CartCount>}
           </CartButton>
         </RightSection>
-
       </NavbarContainer>
 
       {/* Mobile Menu */}

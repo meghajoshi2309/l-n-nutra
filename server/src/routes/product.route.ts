@@ -11,10 +11,10 @@ import { authenticate, authorize } from '../middlewares/auth.middleware';
 const router = Router();
 
 // Get all products - accessible by all users
-router.get('/', authenticate, getAllProductsController);
+router.get('/', getAllProductsController);
 
 // Get product by ID - accessible by all users
-router.get('/:id', authenticate, getProductByIdController);
+router.get('/:id', getProductByIdController);
 
 // Create a product - only admins can access
 router.post('/', authenticate, authorize(['admin']), createProductController);

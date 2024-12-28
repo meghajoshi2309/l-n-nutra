@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import styled, { keyframes } from "styled-components";
 import { useIsMobile } from "../../../Hook/isMobileView";
 import { toast } from "react-toastify";
@@ -230,8 +230,8 @@ const EyeShape = styled.div<{ $isOpen: boolean }>`
     border: 1.5px solid white;
 
     ${(props) =>
-      !props.$isOpen &&
-      `border: none;
+    !props.$isOpen &&
+    `border: none;
     border-bottom: 1.5px solid white;
     height: 6px;
     transform: none;
@@ -433,7 +433,7 @@ const Login = () => {
                   }
                 }
               } catch (err: any) {
-                toast.error("An error occurred during login.");
+                toast.error(err.response.data.error);
               }
             }}
           >

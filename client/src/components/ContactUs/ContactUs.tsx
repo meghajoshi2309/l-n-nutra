@@ -218,7 +218,7 @@ const SubmitButton = styled.button`
 `;
 
 const MainContent = styled.div`
-  padding: 6rem 0 0 0;
+  /* padding: 6rem 0 0 0; */
 `;
 
 const MapSection = styled.section`
@@ -447,7 +447,7 @@ export default function ContactPage() {
           </ContentGrid>
         </ContentWrapper>
       </MainContent>
-      <MapSection>
+      {/* <MapSection>
         <MapContainer>
           <MapIframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.006923413286!2d77.59931067479265!3d12.971599915123703!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15d1575110d9%3A0x623c6c5c05d5b8ee!2sGENETIC%20NUTRITION!5e0!3m2!1sen!2sin!4v1702612345678!5m2!1sen!2sin"
@@ -457,7 +457,7 @@ export default function ContactPage() {
             aria-label="Google Maps showing our location"
           />
         </MapContainer>
-      </MapSection>
+      </MapSection> */}
 
       {/* <Footer>
         <FooterContent>

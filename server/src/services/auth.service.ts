@@ -33,7 +33,7 @@ export const loginUser = async (data: z.infer<typeof loginSchema>) => {
   if (!user) throw new Error('User not found');
 
   const passwordMatch = await bcrypt.compare(data.password, user.password);
-  if (!passwordMatch) throw new Error('Invalid password');
+  if (!passwordMatch) throw new Error('Invalid credentials');
 
   const token = jwt.sign({ userId: user.id, role: user.role, userName: user.username }, JWT_SECRET, { expiresIn: '1h' });
   return { token, user };

@@ -6,9 +6,9 @@ export const LayoutWrapper = styled.div`
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  background-color: black;
+  /* background-color: black; */
 `;
 
 export const Content = styled.main`
-  // padding-top: 70px; // To account for the fixed navbar
+   padding-top: 70px; // To account for the fixed navbar
 `;

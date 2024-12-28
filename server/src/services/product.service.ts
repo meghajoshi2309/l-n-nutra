@@ -5,7 +5,7 @@ export const getAllProducts = async () => {
 };
 
 export const getProductById = async (id: number) => {
-  return await prisma.product.findUnique({ where: { ProductID: id } });
+  return await prisma.product.findUnique({ where: { id: id } });
 };
 
 export const createProduct = async (data: {
@@ -27,9 +27,9 @@ export const updateProduct = async (id: number, data: {
   Tag?: string;
   ImageUrl?: string;
 }) => {
-  return await prisma.product.update({ where: { ProductID: id }, data });
+  return await prisma.product.update({ where: { id: id }, data });
 };
 
 export const deleteProduct = async (id: number) => {
-  return await prisma.product.delete({ where: { ProductID: id } });
+  return await prisma.product.delete({ where: { id: id } });
 };

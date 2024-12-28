@@ -16,7 +16,6 @@ declare global {
 }
 
 export const authenticate = (req: Request, res: Response, next: NextFunction) => {
-  console.log("req",req);
   
   const token = req.header('Authorization')?.replace('Bearer ', '');
   if (!token) {
