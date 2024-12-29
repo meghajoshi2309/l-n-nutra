@@ -368,6 +368,7 @@ const Registration = () => {
               try {
                 const response = await axios.post('http://localhost:5000/api/auth/register', values);
                 toast.success('Registration successful!');
+                alert('Registration successful! Please check your email to verify.');
                 navigate('/login');
               } catch (err) {
                 toast.error('An error occurred during registration.');
@@ -405,7 +406,7 @@ const Registration = () => {
                   />
                   <Label htmlFor="email">Email  <span style={{ color: "red" }}>*</span> </Label>
                   {formik.errors.email && formik.touched.email && (
-                   <ValidationError>{formik.errors.email}</ValidationError>
+                    <ValidationError>{formik.errors.email}</ValidationError>
                   )}
                 </InputGroup>
 
@@ -420,7 +421,7 @@ const Registration = () => {
                   />
                   <Label htmlFor="password">Password <span style={{ color: "red" }}>*</span></Label>
                   {formik.errors.password && formik.touched.password && (
-                   <ValidationError>{formik.errors.password}</ValidationError>
+                    <ValidationError>{formik.errors.password}</ValidationError>
                   )}
                   <EyeIcon
                     onClick={() => setShowPassword(!showPassword)}
@@ -452,7 +453,7 @@ const Registration = () => {
                   />
                   <Label htmlFor="confirmPassword">Confirm Password <span style={{ color: "red" }}>*</span></Label>
                   {formik.errors.confirmPassword && formik.touched.confirmPassword && (
-                   <ValidationError>{formik.errors.confirmPassword}</ValidationError>
+                    <ValidationError>{formik.errors.confirmPassword}</ValidationError>
                   )}
                   <EyeIcon
                     onClick={() => setShowPassword(!showPassword)}

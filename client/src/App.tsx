@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 import { CartProvider } from './context/CartContext';
+import Verification from './components/Varification/Varification';
 
 const App: React.FC = () => {
   return (
@@ -23,7 +24,7 @@ const App: React.FC = () => {
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
+          <Route path="/verify/:token" element={<Verification />} />
           {/* Layout-based routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
@@ -48,7 +49,7 @@ const App: React.FC = () => {
           {/* Redirect unknown routes to home */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-        <ToastContainer/>
+        <ToastContainer />
       </CartProvider>
     </AuthProvider>
     // </Router>

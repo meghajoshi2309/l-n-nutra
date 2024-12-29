@@ -1,3 +1,4 @@
+import { verifyUser } from '../services/auth.service';
 import { Request, Response } from 'express';
 import { loginUser, registerUser } from '../services/auth.service';
 import { loginSchema, registrationSchema } from '../validators/validation';
@@ -35,5 +36,17 @@ export const login = async (req: Request, res: Response) => {
       // Handle other errors
       res.status(500).json({ error: error.message });
     }
+  }
+};
+
+
+
+export const verify = async (req: Request, res: Response) => {
+  try {
+    const token = req.params.token;
+    const user = await verifyUser(token);
+    res.status(200).json({ message: 'Email verified successfully', user });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
   }
 };
