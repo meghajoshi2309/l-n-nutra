@@ -15,8 +15,8 @@ const Verification: React.FC = () => {
         })
         .catch((error) => {
           console.error(error);
-          alert('Invalid verification link.');
-          navigate('/register');
+          // alert('Invalid verification link.');
+          // navigate('/register');
         });
     }
   }, [token, navigate]);

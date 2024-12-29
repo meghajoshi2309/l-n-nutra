@@ -6,6 +6,7 @@ import { JWT_SECRET } from '../config';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { sendVerificationEmail } from './email.service';
+import { Role } from '@prisma/client';
 
 export const registerUser = async (data: z.infer<typeof registrationSchema>) => {
   // Check if user with email already exists
@@ -19,14 +20,16 @@ export const registerUser = async (data: z.infer<typeof registrationSchema>) => 
 
   const verificationToken = uuidv4();
 
+  console.log("verificationToken",verificationToken);
+  
   // Create the user
   const user = await prisma.user.create({
     data: {
       username: data.username,
       email: data.email,
       password: hashedPassword,
-      role: 'user',
-      verificationToken: verificationToken,
+      verificationToken,
+      role: Role.USER,
     },
   });
   await sendVerificationEmail(data.email, verificationToken);

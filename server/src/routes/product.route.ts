@@ -7,6 +7,7 @@ import {
   deleteProductController 
 } from '../controllers/product.controller';
 import { authenticate, authorize } from '../middlewares/auth.middleware';
+import { Role } from '@prisma/client';
 
 const router = Router();
 
@@ -17,12 +18,12 @@ router.get('/', getAllProductsController);
 router.get('/:id', getProductByIdController);
 
 // Create a product - only admins can access
-router.post('/', authenticate, authorize(['admin']), createProductController);
+router.post('/', authenticate, authorize([Role.ADMIN]), createProductController);
 
 // Update a product - only admins can access
-router.put('/:id', authenticate, authorize(['admin']), updateProductController);
+router.put('/:id', authenticate, authorize([Role.ADMIN]), updateProductController);
 
 // Delete a product - only admins can access
-router.delete('/:id', authenticate, authorize(['admin']), deleteProductController);
+router.delete('/:id', authenticate, authorize([Role.ADMIN]), deleteProductController);
 
 export default router;

@@ -426,7 +426,7 @@ const Login = () => {
                 if (response.data) {
                   login(response.data.token);
                   const user = getUserFromToken(response.data.token);
-                  if (user && user.role === "admin") {
+                  if (user && user.role === "ADMIN") {
                     navigate("/admin");
                   } else {
                     navigate("/");
