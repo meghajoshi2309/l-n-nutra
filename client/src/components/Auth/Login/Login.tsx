@@ -1,11 +1,13 @@
-import { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import { useState, useEffect, useRef, useContext } from "react";
+import axios, { AxiosError } from "axios";
 import styled, { keyframes } from "styled-components";
 import { useIsMobile } from "../../../Hook/isMobileView";
 import { toast } from "react-toastify";
 import { Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
+import { getUserFromToken } from "../../../utils/auth";
+import { AuthContext } from "../../../context/AuthContext";
 
 const illustrations = [
   "/product-1.jpeg?height=400&width=400",
@@ -228,8 +230,8 @@ const EyeShape = styled.div<{ $isOpen: boolean }>`
     border: 1.5px solid white;
 
     ${(props) =>
-      !props.$isOpen &&
-      `border: none;
+    !props.$isOpen &&
+    `border: none;
     border-bottom: 1.5px solid white;
     height: 6px;
     transform: none;
@@ -267,7 +269,7 @@ const Button = styled.button`
   color: white;
   border: none;
   padding: 15px;
-  border-radius: 100px;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -284,7 +286,7 @@ const Button = styled.button`
     margin: 15px 0;
     border: none;
     border-radius: 8px;
-    background-color: #4caf50; /* Green for call-to-action */
+    background-color: #000000; /* Green for call-to-action */
     color: #fff; /* White text */
     font-size: 18px;
     font-weight: bold;
@@ -293,7 +295,7 @@ const Button = styled.button`
     transition: all 0.3s ease;
 
     &:hover {
-      background-color: #45a049;
+      background-color: #137903;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     }
   }
@@ -339,6 +341,9 @@ const ValidationError = styled.span`
 `;
 
 const Login = () => {
+
+  const { login } = useContext(AuthContext);
+
   // const [rememberMe, setRememberMe] = useState(false)
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -419,11 +424,16 @@ const Login = () => {
                 );
                 toast.success("Login successful!");
                 if (response.data) {
-                  localStorage.setItem("isLoggedIn", "true");
-                  navigate("/");
+                  login(response.data.token);
+                  const user = getUserFromToken(response.data.token);
+                  if (user && user.role === "ADMIN") {
+                    navigate("/admin");
+                  } else {
+                    navigate("/");
+                  }
                 }
               } catch (err: any) {
-                toast.error("An error occured during login.");
+                toast.error(err.response.data.error);
               }
             }}
           >

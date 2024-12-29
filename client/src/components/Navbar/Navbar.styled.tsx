@@ -12,7 +12,8 @@ export const NavbarContainer = styled.header`
   left: 0;
   right: 0;
   height: 70px;
-  backdrop-filter: blur(5px);
+  /* backdrop-filter: blur(5px); */
+  background-color: black;
   display: flex;
   align-items: center;
   padding: 0 2rem;
@@ -57,9 +58,9 @@ export const LogoText = styled.div`
 export const NavLinks = styled.nav<{ hasBorder?: boolean }>`
   display: flex;
   margin: 0 auto;
-  border: ${({ hasBorder }) => (hasBorder ? '2px solid #878885;' : '')}; 
+  /* border: ${({ hasBorder }) => (hasBorder ? '2px solid #878885;' : '')}; 
   border-radius: ${({ hasBorder }) => (hasBorder ? '100px' : '')};
-  box-shadow: ${({ hasBorder }) => (hasBorder ? '0 0 20px 0 rgba(255, 255, 255, 0.4)' : '')};
+  box-shadow: ${({ hasBorder }) => (hasBorder ? '0 0 20px 0 rgba(255, 255, 255, 0.4)' : '')}; */
   padding: 20px;
   padding-left: 40px;
   padding-right: 40px;
