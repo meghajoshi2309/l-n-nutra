@@ -20,8 +20,12 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   padding: 20px;
-`;
 
+  @media (max-width: 768px) {
+    padding: 0px;
+    overflow-y: auto; /* Enable vertical scrolling on smaller devices */
+  }
+`;
 
 const Card = styled.div`
   background: white;
@@ -29,16 +33,16 @@ const Card = styled.div`
   overflow: hidden;
   width: 100%;
   max-width: 1000px;
-  height: 35rem;
+  height: 100%; /* Allow it to grow or shrink dynamically */
   display: flex;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 768px) {
     flex-direction: column;
     background: transparent;
-  }`;
-
-
+    height: auto; /* Let the height adjust for smaller screens */
+  }
+`;
 
 const IllustrationSection = styled.div`
   flex: 1.5;
@@ -70,9 +74,23 @@ const IllustrationImage = styled.img`
 
 const FormSection = styled.div`
   flex: 1;
-  padding: 30px;
-  `;
+  padding: 40px;
+  max-width: 400px;
+  margin: 2rem;
+  text-align: center;
+  overflow-y: auto; /* Enable scrolling if content overflows */
+  max-height: 100%; /* Restrict the height to prevent overflow issues */
 
+  @media (max-width: 768px) {
+    border: 2px solid #444;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #1e1e1e, #2b2b2b);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2),
+      inset 0 2px 4px rgba(255, 255, 255, 0.1);
+    height: auto; /* Ensure it adjusts for content height */
+    padding: 20px; /* Add padding for smaller screens */
+  }
+`;
 
 const Title = styled.h1`
   font-size: 24px;
@@ -105,6 +123,12 @@ const Input = styled.input`
   font-size: 16px;
   transition: all 0.3s ease;
 
+  /* Remove background color when the input is autofilled */
+  &::-webkit-internal-autofill-selected {
+    background-color: red !important;
+    color: inherit !important;
+  }
+
   &:focus {
     border-bottom-color: #137903;
   }
@@ -113,12 +137,22 @@ const Input = styled.input`
   &:not(:placeholder-shown) + label {
     transform: translateY(-20px);
     font-size: 12px;
-    color: #137903;
+    color: #666;
   }
 
   @media (max-width: 768px) {
     color: white;
     background: transparent;
+
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background-color: #222; /* Match the dark background */
+    color: #fff; /* White text for contrast */
+    outline: none;
+    font-size: 16px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5); /* Subtle inner shadow */
+    transition: all 0.3s ease;
 
     &:focus {
       border-bottom-color: #666;
@@ -127,8 +161,6 @@ const Input = styled.input`
     &:focus + label,
     &:not(:placeholder-shown) + label {
       transform: translateY(-20px);
-      font-size: 12px;
-      color: #666;
     }
   }
 `;
@@ -136,11 +168,16 @@ const Input = styled.input`
 const Label = styled.label`
   position: absolute;
   left: 0;
-  top: 10px;
+  top: 8px;
   font-size: 16px;
   color: #666;
   transition: all 0.3s ease;
   pointer-events: none;
+
+  @media (max-width: 768px) {
+    left: 5px;
+    top: 20px;
+  }
 `;
 
 const EyeIcon = styled.div<{ $isOpen: boolean }>`
@@ -237,11 +274,11 @@ const Button = styled.button`
   color: white;
   border: none;
   padding: 15px;
-  border-radius: 100px;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s ease;
-  margin-top: 30px;
+  margin-top: 10px;
 
   &:hover {
     /* background: linear-gradient(135deg, #488e68, #1a7142, #000000); */
@@ -249,8 +286,23 @@ const Button = styled.button`
   }
 
   @media (max-width: 768px) {
-    background: white;
-    color: black;
+    width: 100%;
+    padding: 12px;
+    margin: 15px 0;
+    border: none;
+    border-radius: 8px;
+    background: #000000;
+    color: #fff; /* White text */
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #137903;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
   }
 `;
 
@@ -265,6 +317,7 @@ const Link = styled.a`
   color: #137903;
   text-decoration: none;
   cursor: pointer;
+  margin-left: 10px;
 
   &:hover {
     text-decoration: underline;
@@ -276,9 +329,10 @@ const Link = styled.a`
 
 
 const SignupText = styled.div`
-  text-align: 'center';
-  margin-top: '10px';
-  color: 'black';
+  display: flex;
+  font-size: 18px;
+  margin-top: 10px;
+  justify-content: center;
 
   @media (max-width: 768px) {
     color: white;

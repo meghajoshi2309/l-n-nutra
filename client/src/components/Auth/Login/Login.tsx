@@ -269,7 +269,7 @@ const Button = styled.button`
   color: white;
   border: none;
   padding: 15px;
-  border-radius: 100px;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -286,7 +286,7 @@ const Button = styled.button`
     margin: 15px 0;
     border: none;
     border-radius: 8px;
-    background-color: #4caf50; /* Green for call-to-action */
+    background-color: #000000; /* Green for call-to-action */
     color: #fff; /* White text */
     font-size: 18px;
     font-weight: bold;
@@ -295,7 +295,7 @@ const Button = styled.button`
     transition: all 0.3s ease;
 
     &:hover {
-      background-color: #45a049;
+      background-color: #137903;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     }
   }
