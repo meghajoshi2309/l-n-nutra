@@ -133,6 +133,8 @@ import {
 import { useIsMobile } from '../../../Hook/isMobileView';
 import { useCart } from '../../../context/CartContext';
 import { log } from 'console';
+import ProductPopup from '../../Cart/ProductPopup';
+import { Modal } from 'react-bootstrap';
 
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -140,7 +142,7 @@ const ProductList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const {updateCartCount} = useCart();
+  const { updateCartCount } = useCart();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -218,6 +220,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   const { updateCartCount, cartItemCount } = useCart();
 
+  const [openProductModal, setOpenProductModal] = useState(false);
+
   const addToCart = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -266,73 +270,82 @@ const ProductCard: React.FC<ProductCardProps> = ({
     try {
       await apiClient.delete(`/cart/${cartItem.id}`);
       setCartItems((prev) => prev.filter((item) => item.id !== cartItem.id));
-      updateCartCount(cartItemCount - 1); 
+      updateCartCount(cartItemCount - 1);
       toast.success('Item removed from cart!');
     } catch (error) {
       toast.error('Failed to remove item from cart.');
     }
   };
-
+  const handleClose = () => {
+    setOpenProductModal(false)
+  }
   return (
-    <CardContainer>
-      <ImageContainer>
-        <AspectRatioContainer>
-          <ProductImage src={image} alt={name} />
-        </AspectRatioContainer>
-        {tag && <Tag>{tag}</Tag>}
-        {!isMobile && <HoverIcons>
-          <IconButton>
-            <img src="/view.svg" alt="view" />
-          </IconButton>
-          {cartItem ? (
-            <QuantityControl>
-              <QuantityButton
-                onClick={decreaseQuantity}
-                disabled={cartItem.quantity === 1} // Disable if quantity is 1
-              >-</QuantityButton>
-              <QuantityButton>{cartItem.quantity}</QuantityButton>
-              <QuantityButton onClick={increaseQuantity}>+</QuantityButton>
-              <RemoveButton onClick={removeFromCart}>Remove</RemoveButton>
-            </QuantityControl>
-          ) : (
-            <IconButton onClick={addToCart}>
-              <img src="/product-cart.svg" alt="Add to Cart" />
-            </IconButton>
-          )}
-        </HoverIcons>}
-      </ImageContainer>
-      <DetailsContainer>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <ProductName>{name}</ProductName>
-          <ProductPrice>{price}</ProductPrice>
-          <ProductPrice>{description}</ProductPrice>
-        </div>
-        {isMobile && (
-          <MobileIconContainer>
-            <MobileIconButton>
+    <>
+      <CardContainer>
+        <ImageContainer>
+          <AspectRatioContainer>
+            <ProductImage src={image} alt={name} />
+          </AspectRatioContainer>
+          {tag && <Tag>{tag}</Tag>}
+          {!isMobile && <HoverIcons>
+            <IconButton onClick={() => setOpenProductModal(true)}>
               <img src="/view.svg" alt="view" />
-            </MobileIconButton>
+            </IconButton>
             {cartItem ? (
-              <MobileQuantityControl>
-                <MobileQuantityButton
+              <QuantityControl>
+                <QuantityButton
                   onClick={decreaseQuantity}
-                  disabled={cartItem.quantity === 1}
-                >
-                  -
-                </MobileQuantityButton>
-                <MobileQuantityButton>{cartItem.quantity}</MobileQuantityButton>
-                <MobileQuantityButton onClick={increaseQuantity}>+</MobileQuantityButton>
-                <MobileRemoveButton onClick={removeFromCart}>Remove</MobileRemoveButton>
-              </MobileQuantityControl>
+                  disabled={cartItem.quantity === 1} // Disable if quantity is 1
+                >-</QuantityButton>
+                <QuantityButton>{cartItem.quantity}</QuantityButton>
+                <QuantityButton onClick={increaseQuantity}>+</QuantityButton>
+                <RemoveButton onClick={removeFromCart}>Remove</RemoveButton>
+              </QuantityControl>
             ) : (
-              <MobileIconButton onClick={addToCart}>
+              <IconButton onClick={addToCart}>
                 <img src="/product-cart.svg" alt="Add to Cart" />
-              </MobileIconButton>
+              </IconButton>
             )}
-          </MobileIconContainer>
-        )}
-      </DetailsContainer>
-    </CardContainer>
+          </HoverIcons>}
+        </ImageContainer>
+        <DetailsContainer>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <ProductName>{name}</ProductName>
+            <ProductPrice>{price}</ProductPrice>
+            <ProductPrice>{description}</ProductPrice>
+          </div>
+          {isMobile && (
+            <MobileIconContainer>
+              <MobileIconButton onClick={() => setOpenProductModal(true)}>
+                <img src="/view.svg" alt="view" />
+              </MobileIconButton>
+              {cartItem ? (
+                <MobileQuantityControl>
+                  <MobileQuantityButton
+                    onClick={decreaseQuantity}
+                    disabled={cartItem.quantity === 1}
+                  >
+                    -
+                  </MobileQuantityButton>
+                  <MobileQuantityButton>{cartItem.quantity}</MobileQuantityButton>
+                  <MobileQuantityButton onClick={increaseQuantity}>+</MobileQuantityButton>
+                  <MobileRemoveButton onClick={removeFromCart}>Remove</MobileRemoveButton>
+                </MobileQuantityControl>
+              ) : (
+                <MobileIconButton onClick={addToCart}>
+                  <img src="/product-cart.svg" alt="Add to Cart" />
+                </MobileIconButton>
+              )}
+            </MobileIconContainer>
+          )}
+        </DetailsContainer>
+      </CardContainer>
+      <Modal show={openProductModal} size='xl'>
+        <div style={{ padding: '2rem' }}>
+          <ProductPopup onClose={handleClose} image={image}/>
+        </div>
+      </Modal>
+    </>
   );
 };
 

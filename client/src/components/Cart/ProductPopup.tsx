@@ -5,6 +5,7 @@ import FlavorSelector from './FlavourSelector';
 
 interface ProductPopupProps {
   onClose: () => void
+  image: string
 }
 
 interface Product {
@@ -229,7 +230,7 @@ const SectionTitle = styled.h3`
   color: #333;
 `
 
-const ProductPopup: React.FC<ProductPopupProps> = ({ onClose }) => {
+const ProductPopup: React.FC<ProductPopupProps> = ({ onClose, image }) => {
   const [selectedFlavor, setSelectedFlavor] = useState('')
   const [selectedWeight, setSelectedWeight] = useState('')
   const [quantity, setQuantity] = useState(1)
@@ -268,7 +269,7 @@ const ProductPopup: React.FC<ProductPopupProps> = ({ onClose }) => {
         <X size={24} />
       </CloseButton>
       <ImageContainer>
-        <img src={product.image} alt={product.name} />
+        <img src={image} alt={product.name} />
       </ImageContainer>
 
       <ProductDetails>
