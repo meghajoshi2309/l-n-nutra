@@ -133,7 +133,7 @@ import {
 import { useIsMobile } from '../../../Hook/isMobileView';
 import { useCart } from '../../../context/CartContext';
 import { log } from 'console';
-import ProductPopup from '../../Cart/ProductPopup';
+import ProductPopup from '../../Products/ProductPopup';
 import { Modal } from 'react-bootstrap';
 
 const ProductList: React.FC = () => {
