@@ -38,6 +38,7 @@ const navItems = [
   { title: "About Us", href: "/about" },
   { title: "Contact", href: "/contact" },
   { title: "Blogs", href: "/blogs" },
+  { title: "Products", href: "/products" },
 ];
 
 export const Navbar: React.FC = () => {

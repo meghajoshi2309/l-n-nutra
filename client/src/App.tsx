@@ -16,6 +16,7 @@ import { CartProvider } from './context/CartContext';
 import Verification from './components/Varification/Varification';
 import AboutUs from './components/AboutUs/AboutUs';
 import Blogs from './components/Blogs/Blogs';
+import Products from './components/Products/Products';
 
 const App: React.FC = () => {
   return (
@@ -33,6 +34,7 @@ const App: React.FC = () => {
             <Route path="contact" element={<ContactPage />} />
             <Route path="about" element={<AboutUs />} />
             <Route path="blogs" element={<Blogs />} />
+            <Route path='products' element={<Products/>}/>
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/cart" element={<Cart />} />

@@ -55,9 +55,9 @@ const Home: React.FC = () => {
   return (
     <>
       <Slider onViewProducts={scrollToProducts} />
-      <div ref={productRef}>
+      {/* <div ref={productRef}>
         <ProductList />
-      </div>
+      </div> */}
       <Footer />
     </>
   );
