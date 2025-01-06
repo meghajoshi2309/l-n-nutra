@@ -64,7 +64,7 @@ const AddressForm: React.FC<AddressFormProps> = ({
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group className="mb-3" controlId="lineOne">
-            <Form.Label>Address Line 1</Form.Label>
+            <Form.Label>Address Line 1<span style={{ color: "red" }}>*</span></Form.Label>
             <Form.Control
               type="text"
               name="lineOne"
@@ -94,7 +94,7 @@ const AddressForm: React.FC<AddressFormProps> = ({
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="city">
-            <Form.Label>City</Form.Label>
+            <Form.Label>City<span style={{ color: "red" }}>*</span></Form.Label>
             <Form.Control
               type="text"
               name="city"
@@ -109,7 +109,7 @@ const AddressForm: React.FC<AddressFormProps> = ({
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="country">
-            <Form.Label>Country</Form.Label>
+            <Form.Label>Country<span style={{ color: "red" }}>*</span></Form.Label>
             <Form.Control
               type="text"
               name="country"
@@ -124,7 +124,7 @@ const AddressForm: React.FC<AddressFormProps> = ({
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="pincode">
-            <Form.Label>Pincode</Form.Label>
+            <Form.Label>Pincode<span style={{ color: "red" }}>*</span></Form.Label>
             <Form.Control
               type="text"
               name="pincode"

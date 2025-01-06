@@ -278,3 +278,135 @@ export const RightContainer = styled.div`
   flex-direction: column;
   gap: 20px;
 `;
+
+
+
+
+
+
+// export const RemoveButton = styled.button`
+//   background-color: transparent;
+//   border: 1px solid #dc3545; // Red border
+//   color: #dc3545; // Red text
+//   padding: 6px 12px; // Padding for better clickability
+//   border-radius: 4px; // Rounded corners
+//   font-size: 14px; // Consistent font size
+//   font-weight: 500; // Medium font weight
+//   cursor: pointer; // Pointer cursor on hover
+//   transition: background-color 0.3s ease, color 0.3s ease; // Smooth transition
+
+//   &:hover {
+//     background-color: #f8d7da; // Light red background on hover
+//     color: #721c24; // Dark red text on hover
+//   }
+
+//   &:focus {
+//     outline: none; // Remove default focus outline
+//     box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25); // Add focus shadow
+//   }
+
+//   &:active {
+//     background-color: #c82333; // Darker red on active
+//     border-color: #bd2130; // Darker border on active
+//   }
+
+//   &:disabled {
+//     background-color: #e9ecef; // Light gray when disabled
+//     border-color: #dee2e6; // Light border when disabled
+//     color: #6c757d; // Gray text when disabled
+//     cursor: not-allowed; // Not-allowed cursor when disabled
+//   }
+// `;
+
+export const MobileInputContainer = styled.div`
+  margin-top: 20px;
+  display: flex;
+
+  input {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 10px;
+
+    &:disabled {
+      background-color: #f9f9f9;
+      cursor: not-allowed;
+    }
+  }
+
+  button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:disabled {
+      background-color: #e9ecef;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
+  }
+`;
+
+export const OtpInputContainer = styled.div`
+  margin-top: 10px;
+
+  input {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 10px;
+
+    &:disabled {
+      background-color: #f9f9f9;
+      cursor: not-allowed;
+    }
+  }
+
+  button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:disabled {
+      background-color: #e9ecef;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: #218838;
+    }
+  }
+`;
+
+export const PaymentModeSelect = styled.select`
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 100%;
+  max-width: 300px;
+  background-color: #fff;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  }
+`;

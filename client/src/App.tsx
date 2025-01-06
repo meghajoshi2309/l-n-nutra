@@ -34,9 +34,9 @@ const App: React.FC = () => {
             <Route path="about" element={<AboutUs />} />
             <Route path="blogs" element={<Blogs />} />
             {/* Protected Routes */}
-            <Route element={<ProtectedRoute />}>
+            {/* <Route element={<ProtectedRoute />}> */}
               <Route path="/cart" element={<Cart />} />
-            </Route>
+            {/* </Route> */}
           </Route>
 
 

@@ -3,7 +3,8 @@ import {
   getCartItemsController, 
   addCartItemController, 
   updateCartItemController, 
-  deleteCartItemController 
+  deleteCartItemController, 
+  softDeleteAllCartItemsController
 } from '../controllers/cart.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 
@@ -16,9 +17,11 @@ router.get('/', authenticate, getCartItemsController);
 router.post('/', authenticate, addCartItemController);
 
 // Update cart item quantity - accessible by authenticated users
+router.put('/soft-delete-all', authenticate, softDeleteAllCartItemsController);
 router.put('/:id', authenticate, updateCartItemController);
 
 // Delete cart item - accessible by authenticated users
 router.delete('/:id', authenticate, deleteCartItemController);
+
 
 export default router;

@@ -20,7 +20,6 @@ export const registerUser = async (data: z.infer<typeof registrationSchema>) => 
 
   const verificationToken = uuidv4();
 
-  console.log("verificationToken",verificationToken);
   
   // Create the user
   const user = await prisma.user.create({
