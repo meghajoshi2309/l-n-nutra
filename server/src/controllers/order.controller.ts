@@ -5,6 +5,7 @@ import {
   getOrderById,
   updateOrder,
   deleteOrder,
+  checkUserOrder,
 } from '../services/order.service';
 
 export const createOrderController = async (req: Request, res: Response) => {
@@ -84,5 +85,25 @@ export const deleteOrderController = async (req: Request, res: Response) => {
     res.status(204).json({ message: 'Order deleted successfully' });
   } catch (error: any) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+export const getProductDetails = async (req: Request, res: Response) => {
+  const { email, productId } = req.query;
+
+  if (!email || !productId) {
+    res.status(400).json({ message: "Email and product ID are required" });
+    return
+  }
+
+  try {
+    const orderProduct = await checkUserOrder(email as string, parseInt(productId as string));
+    if (orderProduct) {
+      res.json(orderProduct.product);
+    } else {
+      res.status(404).json({ message: "Product not found or user has not ordered this product" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
   }
 };

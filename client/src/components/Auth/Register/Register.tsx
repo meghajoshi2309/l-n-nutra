@@ -350,6 +350,7 @@ const Registration = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [pupilPosition, setPupilPosition] = useState({ x: 0, y: 0 });
+  console.log(process.env.REACT_APP_BASE_URL);
 
   const eyeRef = useRef<HTMLDivElement>(null);
   const isMobileView = useIsMobile();
@@ -420,9 +421,9 @@ const Registration = () => {
             validationSchema={registrationSchema}
             onSubmit={async (values) => {
               try {
-                const response = await axios.post('http://localhost:5000/api/auth/register', values);
+                const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/register`, values);
                 toast.success('Registration successful!');
-                alert('Registration successful! Please check your email to verify.');
+                // alert('Registration successful! Please check your email to verify.');
                 navigate('/login');
               } catch (err) {
                 toast.error('An error occurred during registration.');

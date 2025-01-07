@@ -325,7 +325,7 @@ const Cart: React.FC = () => {
                 <CartItemImage src={item.product.ImageUrl} alt={item.product.Name} />
                 <CartItemDetails>
                   <CartItemName>{item.product.Name}</CartItemName>
-                  <CartItemPrice>{item.product.Price}</CartItemPrice>
+                  <CartItemPrice>₹{item.product.Price}</CartItemPrice>
                   <CartItemPrice>{item.product.Description}</CartItemPrice>
                   <QuantityControl>
                     <QuantityButton
@@ -410,20 +410,20 @@ const Cart: React.FC = () => {
           <TotalsContainer>
             <TotalsRow>
               <TotalsLabel>Subtotal:</TotalsLabel>
-              <TotalsValue>{calculateTotal().toFixed(2)}</TotalsValue>
+              <TotalsValue>₹{calculateTotal().toFixed(2)}</TotalsValue>
             </TotalsRow>
             <TotalsRow>
               <TotalsLabel>
                 Discount ({isEligibleForDiscount && paymentMode === 'ONLINE' ? '37%' : '10%'}):
               </TotalsLabel>
               <TotalsValue>
-                -{(isEligibleForDiscount && paymentMode === 'ONLINE' ? calculateTotal() * 0.3 : calculateTotal() * 0.1).toFixed(2)}
+                - ₹{(isEligibleForDiscount && paymentMode === 'ONLINE' ? calculateTotal() * 0.3 : calculateTotal() * 0.1).toFixed(2)}
               </TotalsValue>
             </TotalsRow>
             <TotalsRow>
               <TotalsLabel>Total:</TotalsLabel>
               <TotalsValue>
-                {(
+                ₹{(
                   calculateTotal() -
                   (isEligibleForDiscount && paymentMode === 'ONLINE'
                     ? calculateTotal() * 0.3

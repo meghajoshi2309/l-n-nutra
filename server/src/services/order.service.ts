@@ -98,3 +98,20 @@ export const deleteOrder = async (id: number) => {
   });
   return order;
 };
+
+
+export const checkUserOrder = async (email: string, productId: number) => {
+  return await prisma.orderProduct.findFirst({
+    where: {
+      productId: productId,
+      order: {
+        user: {
+          email: email,
+        },
+      },
+    },
+    include: {
+      product: true,
+    },
+  });
+};

@@ -31,7 +31,7 @@ export const registerUser = async (data: z.infer<typeof registrationSchema>) => 
       role: Role.USER,
     },
   });
-  await sendVerificationEmail(data.email, verificationToken);
+  // await sendVerificationEmail(data.email, verificationToken);
   return user;
 };
 
@@ -39,7 +39,7 @@ export const loginUser = async (data: z.infer<typeof loginSchema>) => {
   const user = await prisma.user.findUnique({ where: { email: data.email } });
   if (!user) throw new Error('User not found');
 
-  if (!user.verified) throw new Error('Please verify your email before logging in');
+  // if (!user.verified) throw new Error('Please verify your email before logging in');
 
   const passwordMatch = await bcrypt.compare(data.password, user.password);
   if (!passwordMatch) throw new Error('Invalid credentials');

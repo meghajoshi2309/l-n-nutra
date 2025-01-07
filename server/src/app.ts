@@ -8,6 +8,7 @@ import orderRouter from './routes/order.route'
 import phoneRouter from './routes/phoneNumber.route'
 import prisma from './models';
 import prebookingRoutes from './routes/prebooking.route'
+import { Request, Response } from 'express';
 
 const app = express();
 
@@ -24,12 +25,13 @@ app.use('/api/orders', orderRouter);
 app.use('/api/phone-number', phoneRouter);
 // Example backend route to fetch mobile number
 app.get('/api/phone-number/user/:userId', async (req, res) => {
-    const { userId } = req.params;
-    const phoneNumber = await prisma.phoneNumber.findFirst({
-      where: { userId: Number(userId) },
-    });
-    res.json(phoneNumber);
+  const { userId } = req.params;
+  const phoneNumber = await prisma.phoneNumber.findFirst({
+    where: { userId: Number(userId) },
   });
+  res.json(phoneNumber);
+});
 app.use('/api/prebook', prebookingRoutes);
+
 
 export default app;

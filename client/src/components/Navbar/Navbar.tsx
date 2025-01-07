@@ -150,7 +150,7 @@ export const Navbar: React.FC = () => {
             <Logo src="/logo.jpeg" alt="Logo" />
           </Link>
           &nbsp;
-          <LogoText>L-N Nutra</LogoText>
+          <LogoText>Luminaire Nutritions</LogoText>
         </LogoContainer>
 
         {/* Desktop Nav Links */}
