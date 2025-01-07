@@ -17,6 +17,8 @@ import Verification from './components/Varification/Varification';
 import AboutUs from './components/AboutUs/AboutUs';
 import Blogs from './components/Blogs/Blogs';
 import Products from './components/Products/Products';
+import UserProductInputPage from './components/VerifyUserProduct/VerifyUserProduct';
+import ProductDetailsPage from './components/VerifyUserProduct/ProductDetailsAfterVerification';
 
 const App: React.FC = () => {
   return (
@@ -27,6 +29,8 @@ const App: React.FC = () => {
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify-user-product" element={<UserProductInputPage />} />
+          <Route path="/product-details-verify" element={<ProductDetailsPage />} />
           <Route path="/verify/:token" element={<Verification />} />
           {/* Layout-based routes */}
           <Route path="/" element={<Layout />}>
@@ -36,9 +40,9 @@ const App: React.FC = () => {
             <Route path="blogs" element={<Blogs />} />
             <Route path='products' element={<Products/>}/>
             {/* Protected Routes */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/cart" element={<Cart />} />
-            </Route>
+            {/* <Route element={<ProtectedRoute />}> */}
+            <Route path="/cart" element={<Cart />} />
+            {/* </Route> */}
           </Route>
 
 

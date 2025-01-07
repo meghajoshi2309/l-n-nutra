@@ -40,17 +40,52 @@
 
 
 
-import React, { useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import ProductList from '../Product/ProductList/ProductList';
 import Slider from '../Slider/Slider';
 import Footer from '../Footer/Footer';
+import { AuthContext } from '../../context/AuthContext';
+import apiClient from '../../api/client';
+import DiscountPopup from '../DiscountPopUp/DiscountPopUp';
 
 const Home: React.FC = () => {
   const productRef = useRef<HTMLDivElement>(null);
 
+  const [isEligibleForDiscount, setIsEligibleForDiscount] = useState(false);
+  const [showDiscountPopup, setShowDiscountPopup] = useState(false);
+
+  const { user } = useContext(AuthContext);
+
   const scrollToProducts = () => {
     productRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    // if (user) {
+      const checkEligibility = async () => {
+        try {
+          const response = await apiClient.post('/prebook/check-discount-eligibility', { userId: user?.userId});
+          if (response.data.eligible) {
+            setIsEligibleForDiscount(true);
+            setShowDiscountPopup(true);
+          }
+        } catch (error) {
+          console.error('Failed to check discount eligibility:', error);
+        }
+      };
+
+      checkEligibility();
+    // }
+  }, [user]);
+
+  const handleClosePopup = () => {
+    setShowDiscountPopup(false);
+  };
+
+  useEffect(() =>{
+    console.log("showDiscountPopup",showDiscountPopup);
+    
+  },[showDiscountPopup])
 
   return (
     <>
@@ -58,6 +93,9 @@ const Home: React.FC = () => {
       {/* <div ref={productRef}>
         <ProductList />
       </div> */}
+      {showDiscountPopup && (
+        <DiscountPopup onClose={handleClosePopup} />
+      )}
       <Footer />
     </>
   );

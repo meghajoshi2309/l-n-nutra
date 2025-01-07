@@ -26,6 +26,9 @@ import {
   RightContainer,
   CartContent,
   LeftContainer,
+  MobileInputContainer,
+  OtpInputContainer,
+  PaymentModeSelect,
 } from "./Cart.styled";
 import { useCart } from "../../context/CartContext";
 import AddressForm from "../Address/AddressForm";
@@ -78,10 +81,36 @@ const Cart: React.FC = () => {
   const [addresses, setAddresses] = useState<AddressInputResponse[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<AddressInput | null>(null);
   const [addressToEdit, setAddressToEdit] = useState<AddressInputResponse | null>(null);
+  const [paymentMode, setPaymentMode] = useState<string>('');
+  const [error, setError] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [isMobileNumberSaved, setIsMobileNumberSaved] = useState(false);
 
   const { user } = useContext(AuthContext);
+
   const navigate = useNavigate();
+
   const { cartItemCount, updateCartCount } = useCart();
+
+  const [isEligibleForDiscount, setIsEligibleForDiscount] = useState(false);
+
+  useEffect(() => {
+    const fetchDiscountEligibility = async () => {
+      if (user) {
+        try {
+          const response = await apiClient.post('/prebook/check-discount-eligibility', {
+            userId: user.userId,
+          });
+          setIsEligibleForDiscount(response.data.eligible);
+        } catch (error) {
+          console.error('Failed to check discount eligibility:', error);
+        }
+      }
+    };
+
+    fetchDiscountEligibility();
+  }, [user]);
+
 
   useEffect(() => {
     if (!user) {
@@ -90,7 +119,45 @@ const Cart: React.FC = () => {
     }
     fetchCartItems();
     fetchUserAddresses();
+    fetchSavedMobileNumber();
   }, [user, navigate]);
+
+  const handleSavePhoneNumber = async () => {
+    if (!mobileNumber) {
+      setError('Please enter a valid mobile number.');
+      return;
+    }
+
+    try {
+      // Replace with your backend API URL
+      const response = await apiClient.post('/phone-number', {
+        userId: user?.userId,
+        mobilenumber: mobileNumber,
+      });
+
+      if (response.status === 201) {
+        setError(''); // Clear any previous errors
+        setIsMobileNumberSaved(true)
+        toast.success('Phone number saved successfully');
+      }
+    } catch (err) {
+      setError('Failed to save the phone number. Please try again.');
+      setIsMobileNumberSaved(false)
+      toast.error('Error saving phone number');
+    }
+  };
+
+  const fetchSavedMobileNumber = async () => {
+    try {
+      const response = await apiClient.get(`/phone-number/user/${user?.userId}`);
+      if (response.data && response.data.mobilenumber) {
+        setMobileNumber(response.data.mobilenumber);
+        setIsMobileNumberSaved(true); // Mark as saved
+      }
+    } catch (error) {
+      console.error("Failed to fetch mobile number:", error);
+    }
+  };
 
   const fetchCartItems = async () => {
     try {
@@ -179,27 +246,70 @@ const Cart: React.FC = () => {
     }
   };
 
+  // const placeOrder = async () => {
+  //   if (!selectedAddress) {
+  //     toast.error("Please select an address.");
+  //     return;
+  //   }
+  //   try {
+  //     await apiClient.post("/orders", { addressId: selectedAddress.userId });
+  //     toast.success("Order placed successfully!");
+  //     setCartItems([]); // Clear cart
+  //   } catch (error) {
+  //     toast.error("Failed to place order.");
+  //   }
+  // };
+
   const placeOrder = async () => {
-    if (!selectedAddress) {
-      toast.error("Please select an address.");
+    if (!selectedAddress || !paymentMode || !isMobileNumberSaved) {
+      toast.error("Please select payment mode, address, and save phone number.");
       return;
     }
     try {
-      await apiClient.post("/orders", { addressId: selectedAddress.userId });
+      const addressString = `${selectedAddress.lineOne}, ${selectedAddress.lineTwo || ''} ${selectedAddress.city}, ${selectedAddress.country} - ${selectedAddress.pincode}`;
+      const productsData = cartItems.map(item => ({ productId: item.productId, quantity: item.quantity }));
+      await apiClient.post("/orders", {
+        userId: user?.userId,
+        address: addressString,
+        mobileNumber: mobileNumber || "",
+        netAmount: calculateTotal(),
+        paymentMode: paymentMode,
+        products: productsData,
+      });
       toast.success("Order placed successfully!");
-      setCartItems([]); // Clear cart
+
+      await apiClient.put("/cart/soft-delete-all", {
+        userId: user?.userId,
+      })
+
+      // Clear the cart items from the state
+      setCartItems([]);
+
+      // Update the cart count in the CartContext
+      updateCartCount(0);
+
+      // Reset selected address and payment mode
+      setSelectedAddress(null);
+      setPaymentMode('');
+
+      // Redirect to order confirmation page
+      navigate("/order-confirmation");
+
     } catch (error) {
       toast.error("Failed to place order.");
     }
   };
 
   // Calculate subtotal, discount, and total
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.product.Price * item.quantity,
-    0
-  );
-  const discount = subtotal * 0.1; // 10% discount
-  const total = subtotal - discount;
+  const calculateTotal = () => {
+    const subtotal = cartItems.reduce((sum, item) => sum + item.product.Price * item.quantity, 0);
+
+    // Apply 30% discount if eligible, otherwise apply 10% discount
+    const discount = isEligibleForDiscount && paymentMode === 'ONLINE' ? subtotal * 0.3 : subtotal * 0.1;
+
+    return subtotal - discount;
+  };
+  const isOrderReady = paymentMode !== '' && selectedAddress !== null && isMobileNumberSaved;
 
   if (loading) return <p>Loading...</p>;
 
@@ -215,7 +325,7 @@ const Cart: React.FC = () => {
                 <CartItemImage src={item.product.ImageUrl} alt={item.product.Name} />
                 <CartItemDetails>
                   <CartItemName>{item.product.Name}</CartItemName>
-                  <CartItemPrice>{item.product.Price}</CartItemPrice>
+                  <CartItemPrice>₹{item.product.Price}</CartItemPrice>
                   <CartItemPrice>{item.product.Description}</CartItemPrice>
                   <QuantityControl>
                     <QuantityButton
@@ -230,16 +340,16 @@ const Cart: React.FC = () => {
                     >
                       +
                     </QuantityButton>
-                  <RemoveButton onClick={() => removeItem(item.id)}>
-                    Remove
-                  </RemoveButton>
+                    <RemoveButton onClick={() => removeItem(item.id)}>
+                      Remove
+                    </RemoveButton>
                   </QuantityControl>
                 </CartItemDetails>
               </CartItem>
             ))
           )}
         </LeftContainer>
-  
+
         <RightContainer>
           <AddressContainer>
             <h3>Select Address</h3>
@@ -260,14 +370,14 @@ const Cart: React.FC = () => {
                 </div>
                 <EditAddressButton
                   onClick={() => {
-                    setAddressToEdit(address); // Set address to edit
-                    setShowUpdateAddressForm(true); // Open the update form
+                    setAddressToEdit(address);
+                    setShowUpdateAddressForm(true);
                   }}
                 >
-                  <img src="/edit.png" style={{height: '0.7rem',width: '0.7rem'}}/>
+                  <img src="/edit.png" style={{ height: '0.7rem', width: '0.7rem' }} />
                 </EditAddressButton>&nbsp;&nbsp;
                 <RemoveButton onClick={() => handleDeleteAddress(address.id)}>
-                <img src="/delete.png" style={{height: '1rem',width: '1rem'}}/>
+                  <img src="/delete.png" style={{ height: '1rem', width: '1rem' }} />
                 </RemoveButton>
               </AddressItem>
             ))}
@@ -275,36 +385,63 @@ const Cart: React.FC = () => {
               + Add New Address
             </AddAddressButton>
           </AddressContainer>
-  
+          <AddressContainer>
+            <MobileInputContainer>
+              <input
+                type="text"
+                placeholder="Enter mobile number"
+                value={mobileNumber}
+                onChange={(e) => setMobileNumber(e.target.value)}
+              />
+              <button onClick={handleSavePhoneNumber}>
+                Save
+              </button>
+            </MobileInputContainer>
+
+            <PaymentModeSelect
+              value={paymentMode}
+              onChange={(e) => setPaymentMode(e.target.value)}
+            >
+              <option value="" disabled>Select Payment Mode</option>
+              <option value="CASH_ON_DELIVERY">Cash on Delivery</option>
+              <option value="ONLINE">Online Payment</option>
+            </PaymentModeSelect>
+          </AddressContainer>
           <TotalsContainer>
             <TotalsRow>
               <TotalsLabel>Subtotal:</TotalsLabel>
-              <TotalsValue>{subtotal.toFixed(2)}</TotalsValue>
+              <TotalsValue>₹{calculateTotal().toFixed(2)}</TotalsValue>
             </TotalsRow>
             <TotalsRow>
-              <TotalsLabel>Discount (10%):</TotalsLabel>
-              <TotalsValue>-{discount.toFixed(2)}</TotalsValue>
+              <TotalsLabel>
+                Discount ({isEligibleForDiscount && paymentMode === 'ONLINE' ? '37%' : '10%'}):
+              </TotalsLabel>
+              <TotalsValue>
+                - ₹{(isEligibleForDiscount && paymentMode === 'ONLINE' ? calculateTotal() * 0.3 : calculateTotal() * 0.1).toFixed(2)}
+              </TotalsValue>
             </TotalsRow>
             <TotalsRow>
               <TotalsLabel>Total:</TotalsLabel>
-              <TotalsValue>{total.toFixed(2)}</TotalsValue>
+              <TotalsValue>
+                ₹{(
+                  calculateTotal() -
+                  (isEligibleForDiscount && paymentMode === 'ONLINE'
+                    ? calculateTotal() * 0.3
+                    : calculateTotal() * 0.1)
+                ).toFixed(2)}
+              </TotalsValue>
+
             </TotalsRow>
             <PlaceOrderButton
-              onClick={() => {
-                if (!selectedAddress) {
-                  toast.info("Please select an address first.");
-                  return;
-                }
-                placeOrder();
-              }}
-              disabledProps={!selectedAddress}
+              onClick={placeOrder}
+              disabledProps={!isOrderReady}
             >
               Place Order
             </PlaceOrderButton>
           </TotalsContainer>
         </RightContainer>
       </CartContent>
-  
+
       <>
         {user && (
           <AddressForm
@@ -337,3 +474,39 @@ const Cart: React.FC = () => {
 };
 
 export default Cart;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
