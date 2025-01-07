@@ -1,19 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Minus, Plus, X } from 'lucide-react'
 import FlavorSelector from './FlavourSelector'
 import ProductImageGallery from '../Products/prod-imgs'
+import { useParams } from 'react-router-dom'
+import apiClient from '../../api/client'
 
 interface ProductPopupProps {
-  onClose: () => void
-  image: string
+  image?: string
 }
 
 interface Product {
   id: number
   name: string
   originalPrice: number
-  price: number
+  finalPrice: number
   discount: number
   images: string[]
   description: string
@@ -320,79 +321,221 @@ const GalleryWrapper = styled.div`
   }
 `
 
-const ProductPopup: React.FC<ProductPopupProps> = ({ onClose, image }) => {
-  const [selectedFlavor, setSelectedFlavor] = useState('')
-  const [selectedWeight, setSelectedWeight] = useState('')
-  const [quantity, setQuantity] = useState(1)
+// const ProductPopup = () => {
+//   const [selectedFlavor, setSelectedFlavor] = useState('')
+//   const [selectedWeight, setSelectedWeight] = useState('')
+//   const [quantity, setQuantity] = useState(1);
+//   const [product, setProduct] = useState<Product>({} as Product);
 
-  const product: Product = {
-    id: 1,
-    name: 'Venom-X Pre-Workout',
-    originalPrice: 1055.00,
-    price: 675.00,
-    discount: 36,
-    images: [
-      '/product-1.jpeg?height=400&width=400',
-      '/product-2.jpeg?height=400&width=400',
-      '/product-3.jpeg?height=400&width=400',
-      '/product-1.jpeg?height=400&width=400'
-    ],
-    description: `Experience the ultimate pre-workout formula with Venom-X. 
-    Engineered for maximum performance, this premium supplement delivers:
-    
-    • Explosive Energy & Focus
-    • Enhanced Strength & Power
-    • Improved Endurance
-    • Better Muscle Pumps
-    
-    Our scientifically formulated blend of ingredients ensures you get the most out of every workout session.`,
-    flavors: ['Blue Berry', 'Fruit Punch', 'Watermelon'],
-    weights: ['150g', '200g', '250g']
-  }
+//   const { id } = useParams();
+
+//   const fetchProduct = async () => {
+//     console.log(id);
+
+//     const response = await apiClient.get(`/products/${id}`);
+//     log
+//     setProduct({
+//       id: response.data?.id,
+//       name: response.data?.Name,
+//       originalPrice: 1055.00,
+//       price: 675.00,
+//       discount: 36,
+//       images: [
+//         '/product-1.jpeg?height=400&width=400',
+//         '/product-2.jpeg?height=400&width=400',
+//         '/product-3.jpeg?height=400&width=400',
+//         '/product-1.jpeg?height=400&width=400'
+//       ],
+//       description: `Experience the ultimate pre-workout formula with Venom-X. 
+//     Engineered for maximum performance, this premium supplement delivers:
+
+//     • Explosive Energy & Focus
+//     • Enhanced Strength & Power
+//     • Improved Endurance
+//     • Better Muscle Pumps
+
+//     Our scientifically formulated blend of ingredients ensures you get the most out of every workout session.`,
+//       flavors: ['Blue Berry', 'Fruit Punch', 'Watermelon'],
+//       weights: ['150g', '200g', '250g']
+//     })
+//   }
+
+//   useEffect(() => {
+//     if (id)
+//       fetchProduct();
+//   }, [id])
+
+
+//   const handleQuantityChange = (change: number) => {
+//     const newQuantity = quantity + change
+//     if (newQuantity >= 1 && newQuantity <= 5) {
+//       setQuantity(newQuantity)
+//     }
+//   }
+
+//   const handleAddToCart = () => {
+//     console.log({
+//       product,
+//       flavor: selectedFlavor,
+//       weight: selectedWeight,
+//       quantity
+//     })
+//   }
+//   useEffect(() => {
+//     console.log("product", product);
+
+//   }, [product])
+//   return (
+//     product ? <Container>
+//       {/* <GalleryWrapper>
+//         <ProductImageGallery images={product?.images} productName={product?.name} />
+//       </GalleryWrapper> */}
+//       <Description>{product?.description}</Description>
+//       <ProductDetails>
+//         <ProductName>{product?.name}</ProductName>
+//         <PriceContainer>
+//           <Price>₹{product.price?.toFixed(2)}</Price>
+//           <OriginalPrice>₹{product?.originalPrice?.toFixed(2)}</OriginalPrice>
+//           <DiscountText>{product?.discount}% off</DiscountText>
+//         </PriceContainer>
+
+//         {/* <FlavorSection>
+//           <SectionTitle>Select Flavor</SectionTitle>
+//           <FlavorSelector
+//             flavors={product?.flavors}
+//             selectedFlavor={selectedFlavor}
+//             onSelectFlavor={setSelectedFlavor}
+//           />
+//         </FlavorSection> */}
+
+//         <div>
+//           <SectionTitle>Select Weight</SectionTitle>
+//           <Select
+//             value={selectedWeight}
+//             onChange={(e) => setSelectedWeight(e.target.value)}
+//           >
+//             <option value="">Choose weight</option>
+//             {product.weights?.map((weight) => (
+//               <option key={weight} value={weight}>
+//                 {weight}
+//               </option>
+//             ))}
+//           </Select>
+//         </div>
+
+//         <div>
+//           <SectionTitle>Quantity</SectionTitle>
+//           <QuantityContainer>
+//             <QuantityButton
+//               onClick={() => handleQuantityChange(-1)}
+//               disabled={quantity <= 1}
+//             >
+//               <Minus size={16} />
+//             </QuantityButton>
+//             <QuantityText>{quantity}</QuantityText>
+//             <QuantityButton
+//               onClick={() => handleQuantityChange(1)}
+//             >
+//               <Plus size={16} />
+//             </QuantityButton>
+//           </QuantityContainer>
+//         </div>
+
+//         <AddToCartButton onClick={handleAddToCart}>
+//           Add to Cart
+//         </AddToCartButton>
+//       </ProductDetails>
+//     </Container> :
+//       <></>
+//   )
+// }
+
+// export default ProductPopup
+
+
+
+
+
+
+const ProductPopup = () => {
+  const [selectedFlavor, setSelectedFlavor] = useState('');
+  const [selectedWeight, setSelectedWeight] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  const [product, setProduct] = useState<Product>({
+    id: 0,
+    name: '',
+    originalPrice: 0,
+    finalPrice: 0,
+    discount: 0,
+    images: [],
+    description: '',
+    flavors: [],
+    weights: [],
+  });
+
+  const { id } = useParams();
+
+  const fetchProduct = async () => {
+    try {
+      const response = await apiClient.get(`/products/${id}`);
+      const data = response.data;
+      setProduct({
+        id: data?.id,
+        name: data?.Name,
+        finalPrice: data?.Price - (data?.Discount ? data.Price * (data?.Discount / 100) : 0),
+        originalPrice: data?.Price,
+        discount: data?.Discount,
+        images: data?.Images || [
+          '/product-1.jpeg?height=400&width=400',
+          '/product-2.jpeg?height=400&width=400',
+        ],
+        description: data?.Description || 'No description available.',
+        flavors: data?.Flavors || ['Blue Berry', 'Fruit Punch', 'Watermelon'],
+        weights: data?.Weights || ['150g', '200g', '250g'],
+      });
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      alert('Failed to load product details. Please try again.');
+    }
+  };
+
+  useEffect(() => {
+    if (id) { fetchProduct() }
+  }, [id]);
 
   const handleQuantityChange = (change: number) => {
-    const newQuantity = quantity + change
+    const newQuantity = quantity + change;
     if (newQuantity >= 1 && newQuantity <= 5) {
-      setQuantity(newQuantity)
+      setQuantity(newQuantity);
     }
-  }
+  };
 
   const handleAddToCart = () => {
     console.log({
       product,
       flavor: selectedFlavor,
       weight: selectedWeight,
-      quantity
-    })
-    onClose()
+      quantity,
+    });
+  };
+
+  if (!product.name) {
+    return <div>Loading product details...</div>;
   }
 
   return (
     <Container>
-      <CloseButton onClick={onClose}>
-        <X size={24} />
-      </CloseButton>
       <GalleryWrapper>
-        <ProductImageGallery images={product.images} productName={product.name} />
+        <ProductImageGallery images={product?.images} productName={product?.name} />
       </GalleryWrapper>
       <Description>{product.description}</Description>
       <ProductDetails>
         <ProductName>{product.name}</ProductName>
         <PriceContainer>
-          <Price>₹{product.price.toFixed(2)}</Price>
-          <OriginalPrice>₹{product.originalPrice.toFixed(2)}</OriginalPrice>
-          <DiscountText>{product.discount}% off</DiscountText>
+          <Price>₹{product.originalPrice?.toFixed(2)}</Price>
+          {product.discount && <OriginalPrice>₹{product?.finalPrice?.toFixed(2)}</OriginalPrice>}
+          {product.discount && <DiscountText>{product.discount}% off</DiscountText>}
         </PriceContainer>
-
-        <FlavorSection>
-          <SectionTitle>Select Flavor</SectionTitle>
-          <FlavorSelector
-            flavors={product.flavors}
-            selectedFlavor={selectedFlavor}
-            onSelectFlavor={setSelectedFlavor}
-          />
-        </FlavorSection>
-
         <div>
           <SectionTitle>Select Weight</SectionTitle>
           <Select
@@ -400,39 +543,33 @@ const ProductPopup: React.FC<ProductPopupProps> = ({ onClose, image }) => {
             onChange={(e) => setSelectedWeight(e.target.value)}
           >
             <option value="">Choose weight</option>
-            {product.weights.map((weight) => (
+            {product?.weights?.map((weight) => (
               <option key={weight} value={weight}>
                 {weight}
               </option>
             ))}
           </Select>
         </div>
-
         <div>
           <SectionTitle>Quantity</SectionTitle>
           <QuantityContainer>
-            <QuantityButton 
+            <QuantityButton
               onClick={() => handleQuantityChange(-1)}
               disabled={quantity <= 1}
             >
               <Minus size={16} />
             </QuantityButton>
             <QuantityText>{quantity}</QuantityText>
-            <QuantityButton 
-              onClick={() => handleQuantityChange(1)}
-              disabled={quantity >= 5}
-            >
+            <QuantityButton onClick={() => handleQuantityChange(1)}>
               <Plus size={16} />
             </QuantityButton>
           </QuantityContainer>
         </div>
-
-        <AddToCartButton onClick={handleAddToCart}>
-          Add to Cart
-        </AddToCartButton>
+        <AddToCartButton onClick={handleAddToCart}>Add to Cart</AddToCartButton>
       </ProductDetails>
     </Container>
-  )
-}
+  );
+};
+
 
 export default ProductPopup

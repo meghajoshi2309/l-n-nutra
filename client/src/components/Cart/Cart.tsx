@@ -304,10 +304,7 @@ const Cart: React.FC = () => {
   const calculateTotal = () => {
     const subtotal = cartItems.reduce((sum, item) => sum + item.product.Price * item.quantity, 0);
 
-    // Apply 30% discount if eligible, otherwise apply 10% discount
-    const discount = isEligibleForDiscount && paymentMode === 'ONLINE' ? subtotal * 0.3 : subtotal * 0.1;
-
-    return subtotal - discount;
+    return subtotal;
   };
   const isOrderReady = paymentMode !== '' && selectedAddress !== null && isMobileNumberSaved;
 

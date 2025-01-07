@@ -19,6 +19,7 @@ import Blogs from './components/Blogs/Blogs';
 import Products from './components/Products/Products';
 import UserProductInputPage from './components/VerifyUserProduct/VerifyUserProduct';
 import ProductDetailsPage from './components/VerifyUserProduct/ProductDetailsAfterVerification';
+import ProductPopup from './components/Products/ProductPopup';
 
 const App: React.FC = () => {
   return (
@@ -26,12 +27,14 @@ const App: React.FC = () => {
     <AuthProvider>
       <CartProvider>
         <Routes>
+
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-user-product" element={<UserProductInputPage />} />
           <Route path="/product-details-verify" element={<ProductDetailsPage />} />
           <Route path="/verify/:token" element={<Verification />} />
+
           {/* Layout-based routes */}
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
@@ -39,6 +42,7 @@ const App: React.FC = () => {
             <Route path="about" element={<AboutUs />} />
             <Route path="blogs" element={<Blogs />} />
             <Route path='products' element={<Products/>}/>
+            <Route path='product-details/:id' element={<ProductPopup/>}/>
             {/* Protected Routes */}
             {/* <Route element={<ProtectedRoute />}> */}
             <Route path="/cart" element={<Cart />} />

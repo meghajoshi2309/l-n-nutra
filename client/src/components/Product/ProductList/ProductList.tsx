@@ -132,7 +132,6 @@ import {
 } from './ProductList.styled';
 import { useIsMobile } from '../../../Hook/isMobileView';
 import { useCart } from '../../../context/CartContext';
-import { log } from 'console';
 import ProductPopup from '../../Products/ProductPopup';
 import { Modal } from 'react-bootstrap';
 
@@ -144,26 +143,26 @@ const ProductList: React.FC = () => {
 
   const { updateCartCount } = useCart();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch products
-        const productsResponse = await apiClient.get('/products');
-        setProducts(productsResponse.data);
+  const fetchData = async () => {
+    try {
+      // Fetch products
+      const productsResponse = await apiClient.get('/products');
+      setProducts(productsResponse.data);
 
-        // Fetch user's cart items
-        const token = localStorage.getItem('token');
-        if (token) {
-          const cartResponse = await apiClient.get('/cart');
-          setCartItems(cartResponse.data);
-          updateCartCount(cartResponse?.data?.length)
-        }
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+      // Fetch user's cart items
+      const token = localStorage.getItem('token');
+      if (token) {
+        const cartResponse = await apiClient.get('/cart');
+        setCartItems(cartResponse.data);
+        updateCartCount(cartResponse?.data?.length)
       }
-    };
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
 
     fetchData();
   }, []);
@@ -288,7 +287,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </AspectRatioContainer>
           {tag && <Tag>{tag}</Tag>}
           {!isMobile && <HoverIcons>
-            <IconButton onClick={() => setOpenProductModal(true)}>
+            <IconButton onClick={() => navigate(`/product-details/${id}`)}>
               <img src="/view.svg" alt="view" />
             </IconButton>
             {cartItem ? (
@@ -311,7 +310,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <DetailsContainer>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <ProductName>{name}</ProductName>
-            <ProductPrice>{price}</ProductPrice>
+            <ProductPrice>₹{price}</ProductPrice>
             <ProductPrice>{description}</ProductPrice>
           </div>
           {isMobile && (
@@ -340,11 +339,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </DetailsContainer>
       </CardContainer>
-      <Modal show={openProductModal} size='xl'>
-        <div style={{ padding: '2rem' }}>
-          <ProductPopup onClose={handleClose} image={image}/>
-        </div>
-      </Modal>
+      
     </>
   );
 };
