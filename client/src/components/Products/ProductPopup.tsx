@@ -3,8 +3,10 @@ import styled from 'styled-components'
 import { Minus, Plus, X } from 'lucide-react'
 import FlavorSelector from './FlavourSelector'
 import ProductImageGallery from '../Products/prod-imgs'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import apiClient from '../../api/client'
+import { toast } from 'react-toastify'
+import { useCart } from '../../context/CartContext'
 
 interface ProductPopupProps {
   image?: string
@@ -455,7 +457,9 @@ const GalleryWrapper = styled.div`
 
 
 
-
+interface ProductCardProps {
+  setCartItems: React.Dispatch<React.SetStateAction<any[]>>;
+}
 
 const ProductPopup = () => {
   const [selectedFlavor, setSelectedFlavor] = useState('');
@@ -474,7 +478,9 @@ const ProductPopup = () => {
   });
 
   const { id } = useParams();
-
+  const navigate = useNavigate();
+  const { updateCartCount, cartItemCount } = useCart();
+  
   const fetchProduct = async () => {
     try {
       const response = await apiClient.get(`/products/${id}`);
@@ -486,8 +492,10 @@ const ProductPopup = () => {
         originalPrice: data?.Price,
         discount: data?.Discount,
         images: data?.Images || [
-          '/product-1.jpeg?height=400&width=400',
-          '/product-2.jpeg?height=400&width=400',
+          '/workout-1.jpeg?height=400&width=400',
+          '/p1.jpg?height=400&width=400',
+          '/p2.jpg?height=400&width=400',
+          '/p3.jpg?height=400&width=400',
         ],
         description: data?.Description || 'No description available.',
         flavors: data?.Flavors || ['Blue Berry', 'Fruit Punch', 'Watermelon'],
@@ -509,16 +517,16 @@ const ProductPopup = () => {
       setQuantity(newQuantity);
     }
   };
-
-  const handleAddToCart = () => {
-    console.log({
-      product,
-      flavor: selectedFlavor,
-      weight: selectedWeight,
-      quantity,
-    });
+  const addToCart = async () => {
+    try {
+      const response = await apiClient.post('/cart', { productId: id, quantity: 1 });
+      setCartItems((prev) => [...prev, response.data]);
+      updateCartCount(cartItemCount + 1);
+      toast.success('Item added to cart!');
+    } catch (error) {
+      toast.error('Failed to add item to cart.');
+    }
   };
-
   if (!product.name) {
     return <div>Loading product details...</div>;
   }
@@ -565,7 +573,7 @@ const ProductPopup = () => {
             </QuantityButton>
           </QuantityContainer>
         </div>
-        <AddToCartButton onClick={handleAddToCart}>Add to Cart</AddToCartButton>
+        <AddToCartButton onClick={addToCart}>Add to Cart</AddToCartButton>
       </ProductDetails>
     </Container>
   );

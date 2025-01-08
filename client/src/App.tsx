@@ -20,6 +20,7 @@ import Products from './components/Products/Products';
 import UserProductInputPage from './components/VerifyUserProduct/VerifyUserProduct';
 import ProductDetailsPage from './components/VerifyUserProduct/ProductDetailsAfterVerification';
 import ProductPopup from './components/Products/ProductPopup';
+import OurStory from './components/Footer/OurStory';
 
 const App: React.FC = () => {
   return (
@@ -27,7 +28,6 @@ const App: React.FC = () => {
     <AuthProvider>
       <CartProvider>
         <Routes>
-
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -42,7 +42,8 @@ const App: React.FC = () => {
             <Route path="about" element={<AboutUs />} />
             <Route path="blogs" element={<Blogs />} />
             <Route path='products' element={<Products/>}/>
-            <Route path='product-details/:id' element={<ProductPopup/>}/>
+            <Route path='product-details/:id' element={<ProductPopup setCartItems={}/>}/>
+            <Route path='our-story' element={<OurStory/>}/>
             {/* Protected Routes */}
             {/* <Route element={<ProtectedRoute />}> */}
             <Route path="/cart" element={<Cart />} />

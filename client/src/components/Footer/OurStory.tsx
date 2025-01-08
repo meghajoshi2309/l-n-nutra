@@ -124,7 +124,7 @@ const PeachRectangle = styled.div`
   @media (min-width: 768px) {
     height: 280px;
     bottom: -40px;
-    right: 90px;
+    right: 50px;
   }
 `;
 
@@ -142,25 +142,29 @@ const ImageCredit = styled.p`
   font-style: italic;
 `;
 
-export default function AboutUs() {
+export default function OurStory() {
   return (
     <Container>
       <Content>
         <TextSection>
-          <Title>About Us</Title>
+          <Title>Our Story</Title>
           <Description>
-            At Luminaire Nutrition, we are dedicated to illuminating your path
-            to peak performance and well-being. Founded with a passion for
-            innovation and health, we craft premium supplements designed to fuel
-            your body, sharpen your mind, and empower your lifestyle. Our
-            products are scientifically formulated to meet the diverse needs of
-            modern fitness enthusiasts, athletes, and individuals striving for a
-            balanced life. From pre-workout boosters that drive extreme
-            performance to essential wellness supplements, every product is
-            crafted with precision and care to deliver results you can trust. At
-            Luminaire Nutrition, we believe in synergy — the perfect balance
-            between science, quality, and your unique potential. Synergy Your
-            Energy
+            Every great journey begins with a spark—a vision to create something
+            extraordinary. Luminaire Nutrition was born from that very spark,
+            ignited by our founder, Vedant Soni. With a passion for fitness,
+            health, and performance, Vedant recognized the need for supplements
+            that go beyond just promises—they deliver results. From the very
+            beginning, the mission was clear: to craft premium, science-backed
+            supplements that empower individuals to push boundaries, break
+            barriers, and achieve their full potential. At Luminaire Nutrition,
+            we believe that true strength lies in synergy—the perfect balance
+            between mind, body, and nutrition. Our products are not just
+            supplements; they are tools designed to enhance your journey,
+            whether you’re an athlete, fitness enthusiast, or someone striving
+            for a healthier lifestyle. Today, Luminaire Nutrition stands as a
+            testament to that vision—a brand built on trust, quality, and the
+            relentless pursuit of excellence. This is our story. This is your
+            journey. Together, let’s Synergy Your Energy.
           </Description>
           <LearnMoreButton>Learn More</LearnMoreButton>
         </TextSection>
@@ -170,7 +174,7 @@ export default function AboutUs() {
           <PeachRectangle />
           <StyledImage>
             <img
-              src="/about-us.jpg"
+              src="/story.jpg"
               alt="Description of the new image"
               width="70%"
               height="60%"

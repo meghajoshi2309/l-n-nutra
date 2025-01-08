@@ -221,7 +221,6 @@ export const SearchIcon = styled.div`
   background-position: center;
 
   /* Optional: Add a background image */
-  background-image: url("/search.png");
 `;
 
 export const CartButton = styled.button`

@@ -156,11 +156,11 @@ const slides = [
         text: (
             <>
                 <AnimatedText>
-                    <HeroTitle>Transform Your Limits</HeroTitle>
+                    <HeroTitle>Luminaire Nutritions</HeroTitle>
                 </AnimatedText>
                 <AnimatedText>
                     <HeroText>
-                        Elevate your workout performance with our premium range of supplements. Scientifically formulated to help you break through plateaus and achieve your fitness goals faster than ever before.
+                    Luminaire Nutritions, a flagship brand under L N EXIM, delivers scientifically formulated supplements designed for peak performance and endurance. After receiving exceptional feedback from international markets, we are now entering the domestic market to bring world-class nutrition to fitness enthusiasts nationwide. Guided by our tagline, “Synergy Your Energy,” we emphasize the perfect blend of science and nutrition, empowering individuals to unlock their full potential and achieve extraordinary results.
                     </HeroText>
                 </AnimatedText>
             </>

@@ -492,7 +492,7 @@ export default function ContactPage() {
         </FooterContent>
       </Footer> */}
 
-      <Footer />
+      {/* <Footer /> */}
     </PageContainer>
   );
 }

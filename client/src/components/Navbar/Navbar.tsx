@@ -128,14 +128,14 @@ export const Navbar: React.FC = () => {
                     autoFocus
                   />
                   <MobileSearchActions>
-                    <MobileSearchIcon>
+                    {/* <MobileSearchIcon>
                       <img
                         src="/search.png"
                         alt="Search Icon"
                         width={20}
                         height={20}
                       />
-                    </MobileSearchIcon>
+                    </MobileSearchIcon> */}
                     <MobileSearchCloseButton onClick={closeMobileSearch}>
                       ✕
                     </MobileSearchCloseButton>
