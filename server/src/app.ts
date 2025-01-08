@@ -8,7 +8,6 @@ import orderRouter from './routes/order.route'
 import phoneRouter from './routes/phoneNumber.route'
 import prisma from './models';
 import prebookingRoutes from './routes/prebooking.route'
-import { Request, Response } from 'express';
 
 const app = express();
 

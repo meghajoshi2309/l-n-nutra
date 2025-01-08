@@ -9,6 +9,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*", "config", "controllers", "index.js"],
+  "include": ["src/**/*", "config", "controllers", "middlewares", "models", "routes", "services", "validators"],
   "exclude": ["node_modules"]
 }
