@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build: ./server
+    container_name: backend_app
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_USER: myuser
+      DB_PASSWORD: mypassword
+      DB_NAME: mydatabase
+    depends_on:
+      - db
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+
+  frontend:
+    build: ./client
+    container_name: frontend_app
+    ports:
+      - "3001:3001"
+    environment:
+      REACT_APP_API_URL: http://localhost:3000
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
