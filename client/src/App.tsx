@@ -42,7 +42,7 @@ const App: React.FC = () => {
             <Route path="about" element={<AboutUs />} />
             <Route path="blogs" element={<Blogs />} />
             <Route path='products' element={<Products/>}/>
-            <Route path='product-details/:id' element={<ProductPopup setCartItems={}/>}/>
+            <Route path='product-details/:id' element={<ProductPopup/>}/>
             <Route path='our-story' element={<OurStory/>}/>
             {/* Protected Routes */}
             {/* <Route element={<ProtectedRoute />}> */}
