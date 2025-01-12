@@ -520,7 +520,7 @@ const ProductPopup = () => {
   const addToCart = async () => {
     try {
       const response = await apiClient.post('/cart', { productId: id, quantity: 1 });
-      setCartItems((prev) => [...prev, response.data]);
+      // setCartItems((prev) => [...prev, response.data]);
       updateCartCount(cartItemCount + 1);
       toast.success('Item added to cart!');
     } catch (error) {
