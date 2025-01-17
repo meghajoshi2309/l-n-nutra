@@ -11,11 +11,15 @@
     "prisma:migrate": "prisma migrate dev --name init",
     "postinstall": "prisma generate && npm run build"
   },
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^6.1.0",
+    "@prisma/client": "^5.0.0",
+    "prisma": "^5.0.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",

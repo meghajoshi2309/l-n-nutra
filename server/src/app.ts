@@ -15,7 +15,9 @@ app.use(cors());
 app.use(express.json());
 
 
-
+app.get('/', (req: any, res: any) => {
+  res.send('Welcome to the root route!');
+});
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
